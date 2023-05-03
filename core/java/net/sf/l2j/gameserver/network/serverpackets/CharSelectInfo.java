@@ -25,7 +25,6 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.model.CharSelectInfoPackage;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.base.Experience;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.network.L2GameClient;
 
@@ -114,7 +113,7 @@ public class CharSelectInfo extends L2GameServerPacket
 			writeF(charInfoPackage.getCurrentMp()); // mp cur
 			
 			writeD(charInfoPackage.getSp());
-			writeD(Experience.getVisualExp(charInfoPackage.getLevel(), charInfoPackage.getExp()));
+			writeQ(charInfoPackage.getExp());
 			writeD(charInfoPackage.getLevel());
 			
 			writeD(charInfoPackage.getKarma());
@@ -179,16 +178,12 @@ public class CharSelectInfo extends L2GameServerPacket
 								// delete .. if != 0
 								// then char is inactive
 			writeD(charInfoPackage.getClassId());
-			if (i == lastUsed)
-			{
-				writeD(0x01);
-			}
-			else
-			{
-				writeD(0x00); // c3 auto-select char
-			}
+			writeD(i == lastUsed ? 1 : 0); // c3 auto-select char
 			
 			writeC(charInfoPackage.getEnchantEffect() > 127 ? 127 : charInfoPackage.getEnchantEffect());
+			// TODO: Check the validity of those
+			//writeD(charInfoPackage.getPaperdollObjectId(Inventory.PAPERDOLL_FACE));
+            //writeD(charInfoPackage.getPaperdollItemId(Inventory.PAPERDOLL_FACE));
 		}
 	}
 	

@@ -179,8 +179,10 @@ public class EnterWorld extends L2GameClientPacket
 				}
 			}
 
-			sendPacket(new PledgeShowMemberListAll(clan, activeChar));
+			sendPacket(new PledgeShowMemberListAll(clan));
 			sendPacket(new PledgeStatusChanged(clan));
+			// For some kind of reason, clan window needs its own user info update
+			sendPacket(new UserInfo(activeChar));
 		}
 
 		sendPacket(new UserInfo(activeChar));

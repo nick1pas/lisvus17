@@ -224,7 +224,7 @@ public class L2CastleChamberlainInstance extends L2FolkInstance
 			}
 			else if (actualCommand.equalsIgnoreCase("items"))
 			{
-				if ((player.getClanPrivileges() & L2Clan.CP_CS_OTHER_RIGHTS) == L2Clan.CP_CS_OTHER_RIGHTS)
+				if ((player.getClanPrivileges() & L2Clan.CP_CS_USE_FUNCTIONS) == L2Clan.CP_CS_USE_FUNCTIONS)
 				
 				{
 					if (val.isEmpty())
@@ -374,7 +374,7 @@ public class L2CastleChamberlainInstance extends L2FolkInstance
 			}
 			else if (command.startsWith("manor_menu_select"))
 			{
-				if ((player.getClanPrivileges() & L2Clan.CP_CS_OTHER_RIGHTS) != L2Clan.CP_CS_OTHER_RIGHTS)
+				if ((player.getClanPrivileges() & L2Clan.CP_CS_USE_FUNCTIONS) != L2Clan.CP_CS_USE_FUNCTIONS)
 				
 				{
 					NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
@@ -612,7 +612,7 @@ public class L2CastleChamberlainInstance extends L2FolkInstance
 			}
 			else if (actualCommand.equalsIgnoreCase("manage"))
 			{
-				if ((player.getClanPrivileges() & L2Clan.CP_CS_OTHER_RIGHTS) == L2Clan.CP_CS_OTHER_RIGHTS)
+				if ((player.getClanPrivileges() & L2Clan.CP_CS_USE_FUNCTIONS) == L2Clan.CP_CS_USE_FUNCTIONS)
 				{
 					if (val.equalsIgnoreCase("recovery"))
 					{

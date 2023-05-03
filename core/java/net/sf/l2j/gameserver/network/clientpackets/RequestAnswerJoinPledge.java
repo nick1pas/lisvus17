@@ -80,11 +80,12 @@ public class RequestAnswerJoinPledge extends L2GameClientPacket
 			
 			activeChar.sendPacket(new JoinPledge(requestor.getClanId()));
 			
-			// this also updates the database
+			// This also updates the database
 			clan.addClanMember(activeChar);
 			
 			activeChar.setClan(clan);
-			activeChar.setClanPrivileges(0);
+			activeChar.setPowerGrade(6);
+			activeChar.setClanPrivileges(clan.getPrivilegesByRank(activeChar.getPowerGrade()));
 			// Set siege status if any
 	        activeChar.setSiegeState((byte) requestor.getSiegeState());
 	        activeChar.setSiegeSide(requestor.getSiegeSide());
@@ -104,7 +105,7 @@ public class RequestAnswerJoinPledge extends L2GameClientPacket
 			clan.broadcastToOnlineMembers(new PledgeShowInfoUpdate(clan));
 			
 			// this activates the clan tab for the new member
-			activeChar.sendPacket(new PledgeShowMemberListAll(clan, activeChar));
+			activeChar.sendPacket(new PledgeShowMemberListAll(clan));
 			activeChar.setClanJoinExpiryTime(0);
 			
 			activeChar.broadcastUserInfo();

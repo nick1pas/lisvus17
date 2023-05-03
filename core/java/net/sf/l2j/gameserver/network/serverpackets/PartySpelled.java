@@ -17,7 +17,6 @@ package net.sf.l2j.gameserver.network.serverpackets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
@@ -31,7 +30,6 @@ public class PartySpelled extends L2GameServerPacket
 	private static final String _S__EE_PartySpelled = "[S] EE PartySpelled";
 	private final List<Effect> _effects;
 	private final L2Character _char;
-	private int _extraSlot = 0;
 
 	class Effect
 	{
@@ -76,19 +74,7 @@ public class PartySpelled extends L2GameServerPacket
 
 	public void addPartySpelledEffect(int skillId, int dat, int duration)
 	{
-		/**
-		 * Override slots if effects exceed the number of buffs per slot * 3, since
-		 * client cannot support more visible effects. :)
-		 */
-		int size = Config.BUFF_SLOTS_PER_ROW * 3;
-		if (_effects.size() >= size)
-		{
-			_effects.set(_extraSlot++, new Effect(skillId, dat, duration));
-		}
-		else
-		{
-			_effects.add(new Effect(skillId, dat, duration));
-		}
+		_effects.add(new Effect(skillId, dat, duration));
 	}
 
 	/*

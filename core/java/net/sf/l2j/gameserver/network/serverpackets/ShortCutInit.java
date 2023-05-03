@@ -50,10 +50,11 @@ public class ShortCutInit extends L2GameServerPacket
 			writeD(sc.getSlot() + (sc.getPage() * 12));
 			writeD(sc.getId());
 			
-			if (sc.getLevel() > -1)
-            {
-                writeD(sc.getLevel());
-            }
+			if (sc.getType() == L2ShortCut.TYPE_SKILL) {
+				writeD(sc.getLevel());
+				writeC(0x00); // C5 
+			}
+			
 			writeD(1);
 		}
 	}

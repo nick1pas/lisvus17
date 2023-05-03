@@ -16,7 +16,6 @@ package net.sf.l2j.gameserver.network.serverpackets;
 
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2ClanMember;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 
 /**
  * sample 0000: 68 b1010000 48 00 61 00 6d 00 62 00 75 00 72 00 67 00 00 00 H.a.m.b.u.r.g... 43 00 61 00 6c 00 61 00 64 00 6f 00 6e 00 00 00 C.a.l.a.d.o.n... 00000000 crestid | not used (nuocnam) 00000000 00000000 00000000 00000000 22000000 00000000 00000000 00000000 ally id 00 00 ally name 00000000
@@ -27,13 +26,11 @@ public class PledgeShowMemberListAll extends L2GameServerPacket
 {
 	private static final String _S__68_PLEDGESHOWMEMBERLISTALL = "[S] 53 PledgeShowMemberListAll";
 	private final L2Clan _clan;
-	private final L2PcInstance _activeChar;
 	private final L2ClanMember[] _members;
 	
-	public PledgeShowMemberListAll(L2Clan clan, L2PcInstance activeChar)
+	public PledgeShowMemberListAll(L2Clan clan)
 	{
 		_clan = clan;
-		_activeChar = activeChar;
 		_members = _clan.getMembers();
 	}
 	
@@ -41,7 +38,10 @@ public class PledgeShowMemberListAll extends L2GameServerPacket
 	protected final void writeImpl()
 	{
 		writeC(0x53);
+
+		writeD(0x00); // Set this to 1 for subpledge
 		writeD(_clan.getClanId());
+		writeD(0x00); // Pledge type
 		writeS(_clan.getName());
 		writeS(_clan.getLeaderName());
 		writeD(_clan.getCrestId()); // crest id .. is used again
@@ -49,35 +49,26 @@ public class PledgeShowMemberListAll extends L2GameServerPacket
 		writeD(_clan.getHasCastle());
 		writeD(_clan.getHasHideout());
 		writeD(0);
-		writeD(_activeChar.getLevel());
-		writeD(_clan.getDissolvingExpiryTime() > System.currentTimeMillis() ? 3 : 0);
+		writeD(0);
+		writeD(0);
 		writeD(0);
 		
 		writeD(_clan.getAllyId());
 		writeS(_clan.getAllyName());
 		writeD(_clan.getAllyCrestId());
 		
-		writeD(_clan.isAtWar());// new c3
+		writeD(_clan.isAtWar()); // new c3
 		
-		writeD(_members.length - 1);
+		writeD(_members.length);
 		for (L2ClanMember m : _members)
 		{
-			
-			if (m.getObjectId() == _activeChar.getObjectId())
-			{
-				continue;
-			}
-			
 			writeS(m.getName());
 			writeD(m.getLevel());
 			writeD(m.getClassId());
-			
+			writeD(m.getSex() ? 1 : 0);
+			writeD(m.getRaceOrdinal());
+			writeD((m.isOnline()) ? m.getObjectId() : 0);
 			writeD(0);
-			
-			writeD(1);
-			
-			writeD(m.isOnline() ? m.getObjectId() : 0); // 1=online 0=offline
-			
 		}
 	}
 	

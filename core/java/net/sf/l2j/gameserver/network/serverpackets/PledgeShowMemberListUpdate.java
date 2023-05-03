@@ -14,6 +14,7 @@
  */
 package net.sf.l2j.gameserver.network.serverpackets;
 
+import net.sf.l2j.gameserver.model.L2ClanMember;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 
 /**
@@ -23,23 +24,46 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 public class PledgeShowMemberListUpdate extends L2GameServerPacket
 {
 	private static final String _S__69_PLEDGESHOWMEMBERLISTUPDATE = "[S] 54 PledgeShowMemberListAdd";
-	private final L2PcInstance _player;
+
+	private final String _name;
+	private final int _level;
+	private final int _classId;
+	private final int _isOnline;
+	private final int _race;
+	private final int _sex;
 	
 	public PledgeShowMemberListUpdate(L2PcInstance player)
 	{
-		_player = player;
+		_name = player.getName();
+		_level = player.getLevel();
+		_classId = player.getClassId().getId();
+		_race = player.getRace().ordinal();
+		_sex = player.getAppearance().getSex() ? 1 : 0;
+		_isOnline = (player.isOnline() && !player.inOfflineMode()) ? player.getObjectId() : 0;
+	}
+
+	public PledgeShowMemberListUpdate(L2ClanMember member)
+	{
+	    _name = member.getName();
+	    _level = member.getLevel();
+	    _classId = member.getClassId();
+	    _isOnline = member.isOnline() ? member.getObjectId() : 0;
+		_sex = member.getSex() ? 1 : 0;
+	    _race = member.getRaceOrdinal();
 	}
 	
 	@Override
 	protected final void writeImpl()
 	{
 		writeC(0x54);
-		writeS(_player.getName());
-		writeD(_player.getLevel());
-		writeD(_player.getClassId().getId());
+		writeS(_name);
+		writeD(_level);
+		writeD(_classId);
+		writeD(_sex);
+		writeD(_race);
+		writeD(_isOnline); // 1=online 0=offline
 		writeD(0);
-		writeD(1);
-		writeD(_player.isOnline() && !_player.inOfflineMode() ? _player.getObjectId() : 0); // 1=online 0=offline
+		writeD(0);
 	}
 	
 	/*

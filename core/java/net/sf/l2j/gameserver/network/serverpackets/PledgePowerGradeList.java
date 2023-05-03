@@ -14,39 +14,40 @@
  */
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.L2Clan;
+import java.util.Arrays;
+import java.util.Set;
 
-public class ManagePledgePower extends L2GameServerPacket
+import net.sf.l2j.gameserver.model.L2ClanMember;
+
+public class PledgePowerGradeList extends L2GameServerPacket
 {
-	private static final String _S__30_MANAGEPLEDGEPOWER = "[S] 30 ManagePledgePower";
+    private static final String _S__FE_3B_PLEDGEPOWERGRADELIST = "[S] FE:3B PledgePowerGradeList";
+
+    private final Set<Integer> _ranks;
+	private final L2ClanMember[] _members;
 	
-	private final int _action;
-	private final L2Clan _clan;
-	private final int _rank;
-	
-	public ManagePledgePower(L2Clan clan, int action, int rank)
+	public PledgePowerGradeList(Set<Integer> ranks, L2ClanMember[] members)
 	{
-		_clan = clan;
-		_action = action;
-		_rank = rank;
+		_ranks = ranks;
+		_members = members;
 	}
 	
 	@Override
 	protected final void writeImpl()
 	{
-		writeC(0x30);
-		writeD(_rank);
-		writeD(_action);
-		writeD(_clan.getPrivilegesByRank(_rank));
+		writeC(0xFE);
+		writeH(0x3b);
+		writeD(_ranks.size());
+		for (int rank : _ranks)
+		{
+			writeD(rank);
+			writeD((int) Arrays.stream(_members).filter(m -> m.getPowerGrade() == rank).count());
+		}
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see net.sf.l2j.gameserver.serverpackets.L2GameServerPacket#getType()
-	 */
-	@Override
-	public String getType()
+
+    @Override
+    public String getType()
 	{
-		return _S__30_MANAGEPLEDGEPOWER;
+		return _S__FE_3B_PLEDGEPOWERGRADELIST;
 	}
 }

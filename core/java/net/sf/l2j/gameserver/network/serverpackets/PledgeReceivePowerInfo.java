@@ -14,39 +14,36 @@
  */
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.L2Clan;
+import net.sf.l2j.gameserver.model.L2ClanMember;
 
-public class ManagePledgePower extends L2GameServerPacket
+public class PledgeReceivePowerInfo extends L2GameServerPacket
 {
-	private static final String _S__30_MANAGEPLEDGEPOWER = "[S] 30 ManagePledgePower";
-	
-	private final int _action;
-	private final L2Clan _clan;
-	private final int _rank;
-	
-	public ManagePledgePower(L2Clan clan, int action, int rank)
+    private static final String _S__FE_3C_PLEDGERECEIVEPOWERINFO = "[S] FE:3D PledgeReceivePowerInfo";
+
+	private L2ClanMember _member;
+
+	/**
+	 * @param member
+	 */
+	public PledgeReceivePowerInfo(L2ClanMember member)
 	{
-		_clan = clan;
-		_action = action;
-		_rank = rank;
+		_member = member;
 	}
-	
+
 	@Override
 	protected final void writeImpl()
 	{
-		writeC(0x30);
-		writeD(_rank);
-		writeD(_action);
-		writeD(_clan.getPrivilegesByRank(_rank));
+        writeC(0xfe);
+		writeH(0x3c);
+
+		writeD(_member.getPowerGrade());
+		writeS(_member.getName());
+		writeD(_member.getClan().getPrivilegesByRank(_member.getPowerGrade()));
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see net.sf.l2j.gameserver.serverpackets.L2GameServerPacket#getType()
-	 */
+
 	@Override
 	public String getType()
 	{
-		return _S__30_MANAGEPLEDGEPOWER;
+		return _S__FE_3C_PLEDGERECEIVEPOWERINFO;
 	}
 }

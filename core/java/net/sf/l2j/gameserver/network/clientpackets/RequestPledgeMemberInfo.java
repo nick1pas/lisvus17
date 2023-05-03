@@ -14,64 +14,46 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import java.util.logging.Logger;
-
 import net.sf.l2j.gameserver.model.L2Clan;
+import net.sf.l2j.gameserver.model.L2ClanMember;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.network.serverpackets.ManagePledgePower;
+import net.sf.l2j.gameserver.network.serverpackets.PledgeReceiveMemberInfo;
+import net.sf.l2j.gameserver.network.serverpackets.PledgeReceivePowerInfo;
 
-public class RequestPledgePower extends L2GameClientPacket
+public class RequestPledgeMemberInfo extends L2GameClientPacket
 {
-	private static Logger _log = Logger.getLogger(RequestPledgePower.class.getName());
-	private static final String _C__C0_REQUESTPLEDGEPOWER = "[C] C0 RequestPledgePower";
-	
-	private int _rank;
-	private int _action;
-	private int _privs;
+    private static final String _C__D0_1D_REQUESTPLEDGEMEMBERINFO = "[C] D0:1D RequestPledgeMemberInfo";
+
+    private String _playerName;
 	
 	@Override
 	protected void readImpl()
 	{
-		_rank = readD();
-		_action = readD();
-		_privs = (_action == 2) ? readD() : 0;
+		readD();
+		_playerName = readS();
 	}
 	
 	@Override
-	public void runImpl()
+	protected void runImpl()
 	{
 		final L2PcInstance player = getClient().getActiveChar();
 		if (player == null)
-		{
 			return;
-		}
 		
 		final L2Clan clan = player.getClan();
 		if (clan == null)
-		{
 			return;
-		}
+		
+		final L2ClanMember member = clan.getClanMember(_playerName);
+		if (member == null)
+			return;
+		
+		player.sendPacket(new PledgeReceiveMemberInfo(member));
+	}
 
-		if (_action == 2)
-		{
-			if (player.isClanLeader())
-			{
-				clan.setPrivilegesForRanking(_rank, _privs);
-			}
-		}
-		else
-		{
-			player.sendPacket(new ManagePledgePower(clan, _action, _rank));
-		}
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see net.sf.l2j.gameserver.clientpackets.L2GameClientPacket#getType()
-	 */
-	@Override
-	public String getType()
-	{
-		return _C__C0_REQUESTPLEDGEPOWER;
-	}
+    @Override
+    public String getType()
+    {
+        return _C__D0_1D_REQUESTPLEDGEMEMBERINFO;
+    }
 }

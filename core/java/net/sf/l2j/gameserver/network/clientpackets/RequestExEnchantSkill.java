@@ -28,8 +28,8 @@ import net.sf.l2j.gameserver.model.actor.instance.L2NpcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.Experience;
 import net.sf.l2j.gameserver.network.serverpackets.ShortCutRegister;
-import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
+import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
 import net.sf.l2j.gameserver.util.IllegalPlayerAction;
 import net.sf.l2j.gameserver.util.Util;
 import net.sf.l2j.util.Rnd;
@@ -192,11 +192,7 @@ public class RequestExEnchantSkill extends L2GameClientPacket
 		
 		player.getStat().removeExpAndSp(_requiredExp, _requiredSp, false);
 		
-		StatusUpdate su = new StatusUpdate(player.getObjectId());
-		su.addAttribute(StatusUpdate.EXP, Experience.getVisualExp(player.getLevel(), player.getExp()));
-		su.addAttribute(StatusUpdate.SP, player.getSp());
-		player.sendPacket(su);
-		
+		player.sendPacket(new UserInfo(player));
 		trainer.showEnchantSkillList(player, player.getClassId());
 		
 		// update all the shortcuts to this skill

@@ -187,7 +187,7 @@ public class CharInfo extends L2GameServerPacket
 			writeD(_cha.getAppearance().getSex() ? 1 : 0);
 			writeD(_cha.getClassIndex() == 0 ? _cha.getClassId().getId() : _cha.getBaseClass());
 
-			writeD(0); // Hair All, but there are no such items in C4
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HAIRALL));
 			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HEAD));
 			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_RHAND));
 			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LHAND));
@@ -258,12 +258,10 @@ public class CharInfo extends L2GameServerPacket
 
 			writeC(_cha.getRecomLeft()); // Changed by Thorgrim
 			writeH(_cha.getRecomHave()); // Blue value for name (0 = white, 255 = pure blue)
-			writeD(_cha.getMountNpcId() + 1000000);
-
 			writeD(_cha.getClassId().getId());
 
-			writeD(0x00); // ??
-
+			writeD(_cha.getMaxCp());
+			writeD((int) _cha.getCurrentCp());
 			writeC(_cha.isMounted() ? 0 : _cha.getEnchantEffect());
 
 			writeC(_cha.getEventTeam() > 0 ? _cha.getEventTeam() : _cha.getAuraColor()); // team circle around feet 1= Blue, 2 = red

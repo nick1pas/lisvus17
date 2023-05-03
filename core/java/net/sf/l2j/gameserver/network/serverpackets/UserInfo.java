@@ -18,7 +18,6 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.model.actor.instance.L2CubicInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.base.Experience;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.templates.L2NpcTemplate;
 
@@ -78,7 +77,7 @@ public class UserInfo extends L2GameServerPacket
 		writeD(_cha.getAppearance().getSex() ? 1 : 0);
 		writeD(_cha.getClassIndex() == 0 ? _cha.getClassId().getId() : _cha.getBaseClass());
 		writeD(_cha.getLevel());
-		writeD(Experience.getVisualExp(_cha.getLevel(), _cha.getExp()));
+		writeQ(_cha.getExp());
 		writeD(_cha.getSTR());
 		writeD(_cha.getDEX());
 		writeD(_cha.getCON());
@@ -203,13 +202,6 @@ public class UserInfo extends L2GameServerPacket
 		writeC(0x00);
 		
 		writeD(_cha.getClanPrivileges());
-		writeD(0x00); // swim
-		writeD(0x00);
-		writeD(0x00);
-		writeD(0x00);
-		writeD(0x00);
-		writeD(0x00);
-		writeD(0x00);
 		
 		writeH(_cha.getRecomLeft()); // c2 recommendations remaining
 		writeH(_cha.getRecomHave()); // c2 recommendations received
@@ -233,6 +225,12 @@ public class UserInfo extends L2GameServerPacket
 		writeD(_cha.getFishy()); // fishing y
 		writeD(_cha.getFishz()); // fishing z
 		writeD(_cha.getAppearance().getNameColor());
+
+		writeC((_cha.isRunning()) ? 0x01 : 0x00);
+		writeD(0x00);
+		writeD(0x00);
+		writeD(_cha.getAppearance().getTitleColor());
+		writeD(0x00);
 	}
 	
 	/*

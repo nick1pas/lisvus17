@@ -41,8 +41,8 @@ public class PledgeShowInfoUpdate extends L2GameServerPacket
 		writeD(_clan.getHasCastle());
 		writeD(_clan.getHasHideout());
 		writeD(0);
-		writeD(_clan.getLeader().getLevel());
-		writeD(_clan.getDissolvingExpiryTime() > System.currentTimeMillis() ? 3 : 0);
+		writeD(0);
+		writeD(0);
 		writeD(0);
 		writeD(_clan.getAllyId());
 		writeS(_clan.getAllyName());

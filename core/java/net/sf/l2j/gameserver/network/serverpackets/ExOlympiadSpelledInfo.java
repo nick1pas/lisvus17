@@ -17,7 +17,6 @@ package net.sf.l2j.gameserver.network.serverpackets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 
 /**
@@ -30,7 +29,6 @@ public class ExOlympiadSpelledInfo extends L2GameServerPacket
 	private static final String _S__FE_2A_OLYMPIADSPELLEDINFO = "[S] FE:2A ExOlympiadSpelledInfo";
 	private final L2PcInstance _player;
 	private final List<Effect> _effects;
-	private int _extraSlot = 0;
 
 	class Effect
 	{
@@ -54,19 +52,7 @@ public class ExOlympiadSpelledInfo extends L2GameServerPacket
 
 	public void addEffect(int skillId, int dat, int duration)
 	{
-		/**
-		 * Override slots if effects exceed the number of buffs per slot * 3, since
-		 * client cannot support more visible effects. :)
-		 */
-		int size = Config.BUFF_SLOTS_PER_ROW * 3;
-		if (_effects.size() >= size)
-		{
-			_effects.set(_extraSlot++, new Effect(skillId, dat, duration));
-		}
-		else
-		{
-			_effects.add(new Effect(skillId, dat, duration));
-		}
+		_effects.add(new Effect(skillId, dat, duration));
 	}
 
 	@Override

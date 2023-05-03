@@ -1037,7 +1037,7 @@ public final class Config
 	
 	/**
      * This is the first UNREACHABLE level.<BR>
-     * example: If you want a max at 78 & 100%, you have to set it to 79.<BR><BR>
+     * example: If you want a max at 80 & 100%, you have to set it to 81.<BR><BR>
      */
 	public static byte MAX_PLAYER_LEVEL;
 	
@@ -1239,8 +1239,6 @@ public final class Config
 	public static byte BUFFS_MAX_AMOUNT;
 	/** Max number of debuffs */
 	public static byte DEBUFFS_MAX_AMOUNT;
-	/** Number of buff slots per row */
-	public static byte BUFF_SLOTS_PER_ROW;
 	
 	/** Alt Settings for devs */
 	public static boolean ALT_DEV_NO_QUESTS;
@@ -1635,7 +1633,7 @@ public final class Config
 			MAX_PATK_SPEED = Integer.parseInt(otherSettings.getProperty("MaxPAtkSpeed", "1500"));
 			MAX_MATK_SPEED = Integer.parseInt(otherSettings.getProperty("MaxMAtkSpeed", "1999"));
 			
-			MAX_PLAYER_LEVEL = Byte.parseByte(otherSettings.getProperty("MaxPlayerLevel", "79"));
+			MAX_PLAYER_LEVEL = Byte.parseByte(otherSettings.getProperty("MaxPlayerLevel", "81"));
 			if (MAX_PLAYER_LEVEL > Experience.LEVEL.length - 1)
 			{
 				MAX_PLAYER_LEVEL = (byte) (Experience.LEVEL.length - 1);
@@ -1853,7 +1851,6 @@ public final class Config
 			ALT_LOTTERY_2_AND_1_NUMBER_PRIZE = Integer.parseInt(altSettings.getProperty("AltLottery2and1NumberPrize", "200"));
 			BUFFS_MAX_AMOUNT = Byte.parseByte(altSettings.getProperty("MaxBuffAmount", "20"));
 			DEBUFFS_MAX_AMOUNT = Byte.parseByte(altSettings.getProperty("MaxDebuffAmount", "10"));
-			BUFF_SLOTS_PER_ROW = Byte.parseByte(altSettings.getProperty("BuffSlotsPerRow", "10"));
 			ALT_DEV_NO_QUESTS = Boolean.parseBoolean(altSettings.getProperty("AltDevNoQuests", "False"));
 			ALT_DEV_NO_SPAWNS = Boolean.parseBoolean(altSettings.getProperty("AltDevNoSpawns", "False"));
 			

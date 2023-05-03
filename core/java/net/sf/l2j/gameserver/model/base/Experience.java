@@ -112,24 +112,4 @@ public class Experience
      * example: If you want a max at 80 & 100%, you have to set it to 81.<BR><BR>
      */
     public final static byte PET_MAX_LEVEL = 81;
-    
-    private final static int CLIENT_EXP_STEP_ABOVE_SUPPORTED_LEVEL = 50000;
-    private final static byte MAX_CLIENT_SUPPORTED_LEVEL = 79;
-    
-    public final static int getVisualExp(int level, long exp)
-	{
-		if (level < MAX_CLIENT_SUPPORTED_LEVEL)
-		{
-			return (int) exp;
-		}
-		
-		int levelDiff = level - MAX_CLIENT_SUPPORTED_LEVEL;
-		long visualExp = LEVEL[MAX_CLIENT_SUPPORTED_LEVEL] + (CLIENT_EXP_STEP_ABOVE_SUPPORTED_LEVEL * levelDiff);
-		
-		long currentExpForLevel = exp - LEVEL[level];
-		long totalExpForLevel = LEVEL[level + 1] - LEVEL[level];
-		double expMultiplier = (double)currentExpForLevel / (double)totalExpForLevel;
-		visualExp += Math.floor(CLIENT_EXP_STEP_ABOVE_SUPPORTED_LEVEL * expMultiplier);
-		return (int) visualExp;
-	}
 }

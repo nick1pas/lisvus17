@@ -283,6 +283,7 @@ $MYG < ../sql/character_skills_save.sql &> /dev/null
 $MYG < ../sql/character_subclasses.sql &> /dev/null
 $MYG < ../sql/characters.sql &> /dev/null
 $MYG < ../sql/clan_data.sql &> /dev/null
+$MYG < ../sql/clan_privs.sql &> /dev/null
 $MYG < ../sql/clan_wars.sql &> /dev/null
 $MYG < ../sql/clanhall.sql &> /dev/null
 $MYG < ../sql/clanhall_functions.sql &> /dev/null

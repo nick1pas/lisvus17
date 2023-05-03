@@ -72,7 +72,8 @@ public abstract class Inventory extends ItemContainer
 	public static final int PAPERDOLL_FEET = 12;
 	public static final int PAPERDOLL_BACK = 13;
 	public static final int PAPERDOLL_HAIR = 14;
-	public static final int PAPERDOLL_TOTALSLOTS = 15;
+	public static final int PAPERDOLL_HAIRALL = 15;
+	public static final int PAPERDOLL_TOTALSLOTS = 16;
     
     // Speed percentage mods
     public static final double MAX_ARMOR_WEIGHT = 12000;
@@ -204,7 +205,8 @@ public abstract class Inventory extends ItemContainer
 		public void notifyUnequiped(int slot, L2ItemInstance item)
         {
             if (!(getOwner() instanceof L2PcInstance))
-                return;
+                return;
+
             L2PcInstance player = (L2PcInstance)getOwner();
 
             L2Skill passiveSkill = null;
@@ -281,7 +283,8 @@ public abstract class Inventory extends ItemContainer
                         _log.warning("Inventory.ArmorSetListener: Incorrect skill: "+armorSet.getSkillId()+".");
 
                     if (armorSet.containShield(player)) // has shield from set
-                    {
+                    {
+
                         L2Skill skills = SkillTable.getInstance().getInfo(armorSet.getShieldSkillId(),1);
                         if (skills != null)
                         {
@@ -290,7 +293,8 @@ public abstract class Inventory extends ItemContainer
                         }
                         else
                             _log.warning("Inventory.ArmorSetListener: Incorrect skill: "+armorSet.getShieldSkillId()+".");
-                    }
+                    }
+
                 }
             }
             else if (armorSet.containShield(item.getItemId()))
@@ -893,7 +897,8 @@ public abstract class Inventory extends ItemContainer
         
         if (getOwner() instanceof L2PcInstance)
         {
-            L2PcInstance player = (L2PcInstance)getOwner();
+            L2PcInstance player = (L2PcInstance)getOwner();
+
             if (!player.isGM())
             {
                 if (!player.isHero() && item.isHeroItem())

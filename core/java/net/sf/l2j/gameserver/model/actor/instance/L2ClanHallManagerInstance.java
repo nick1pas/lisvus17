@@ -216,7 +216,7 @@ public class L2ClanHallManagerInstance extends L2FolkInstance
 			}
 			else if (actualCommand.equalsIgnoreCase("manage"))
 			{
-				if ((player.getClanPrivileges() & L2Clan.CP_CH_OTHER_RIGHTS) == L2Clan.CP_CH_OTHER_RIGHTS)
+				if ((player.getClanPrivileges() & L2Clan.CP_CH_USE_FUNCTIONS) == L2Clan.CP_CH_USE_FUNCTIONS)
 				{
 					if (val.equalsIgnoreCase("recovery"))
 					{

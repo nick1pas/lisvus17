@@ -51,6 +51,7 @@ public class SkillList extends L2GameServerPacket
             writeD(temp.isPassive() ? 1 : 0);
             writeD(temp.getLevel());
             writeD(temp.getId());
+			writeC(0x00); //c5
         }
 	}
 	

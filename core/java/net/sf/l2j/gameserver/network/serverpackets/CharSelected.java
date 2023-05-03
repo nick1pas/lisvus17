@@ -16,7 +16,6 @@ package net.sf.l2j.gameserver.network.serverpackets;
 
 import net.sf.l2j.gameserver.GameTimeController;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.base.Experience;
 
 /**
  * This class ...
@@ -61,7 +60,7 @@ public class CharSelected extends L2GameServerPacket
 		writeF(_cha.getCurrentHp());
 		writeF(_cha.getCurrentMp());
 		writeD(_cha.getSp());
-		writeD(Experience.getVisualExp(_cha.getLevel(), _cha.getExp()));
+		writeQ(_cha.getExp());
 		writeD(_cha.getLevel());
 		writeD(_cha.getKarma()); // thx evill33t
 		writeD(0x0); // ?

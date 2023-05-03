@@ -15,12 +15,9 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.base.Experience;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 
 /**
- * TODO Add support for Eval. Score dddddSdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffddddSddd rev420 dddddSdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffddddSdddcccddhh rev478
- * dddddSdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddffffddddSdddcccddhhddd rev551
  * @version $Revision: 1.2.2.2.2.8 $ $Date: 2005/03/27 15:29:39 $
  */
 public class GMViewCharacterInfo extends L2GameServerPacket
@@ -54,7 +51,7 @@ public class GMViewCharacterInfo extends L2GameServerPacket
 		writeD(_cha.getAppearance().getSex() ? 1 : 0);
 		writeD(_cha.getClassId().getId());
 		writeD(_cha.getLevel());
-		writeD(Experience.getVisualExp(_cha.getLevel(), _cha.getExp()));
+		writeQ(_cha.getExp());
 		writeD(_cha.getSTR());
 		writeD(_cha.getDEX());
 		writeD(_cha.getCON());
@@ -88,6 +85,7 @@ public class GMViewCharacterInfo extends L2GameServerPacket
 		writeD(_cha.getInventory().getPaperdollObjectId(Inventory.PAPERDOLL_BACK));
 		writeD(_cha.getInventory().getPaperdollObjectId(Inventory.PAPERDOLL_RHAND));
 		writeD(_cha.getInventory().getPaperdollObjectId(Inventory.PAPERDOLL_HAIR));
+		// writeD(_player.getInventory().getItemObjectIdFrom(Paperdoll.FACE));
 
 		writeD(_cha.getInventory().getPaperdollItemId(Inventory.PAPERDOLL_UNDER));
 		writeD(_cha.getInventory().getPaperdollItemId(Inventory.PAPERDOLL_REAR));
@@ -106,6 +104,7 @@ public class GMViewCharacterInfo extends L2GameServerPacket
 		writeD(_cha.getInventory().getPaperdollItemId(Inventory.PAPERDOLL_BACK));
 		writeD(_cha.getInventory().getPaperdollItemId(Inventory.PAPERDOLL_RHAND));
 		writeD(_cha.getInventory().getPaperdollItemId(Inventory.PAPERDOLL_HAIR));
+		// writeD(_player.getInventory().getItemIdFrom(Paperdoll.FACE));
 
 		writeD(_cha.getPAtk(null));
 		writeD(_cha.getPAtkSpd());
@@ -152,10 +151,27 @@ public class GMViewCharacterInfo extends L2GameServerPacket
 
 		writeH(_cha.getRecomLeft());
 		writeH(_cha.getRecomHave()); // Blue value for name (0 = white, 255 = pure blue)
+		writeD(0x00); // special effects? circles around player...
 		writeD(_cha.getClassId().getId());
 
 		writeD(_cha.getMaxCp());
 		writeD((int) _cha.getCurrentCp());
+
+		//new c5 
+		writeC(_cha.isRunning() ? 0x01 : 0x00); //changes the Speed display on Status Window 
+        
+		//writeD(_cha.getInventory().getPaperdollObjectId(Inventory.PAPERDOLL_FACE));
+		writeD(0x00);
+        
+		//writeD(_cha.getInventory().getPaperdollItemId(Inventory.PAPERDOLL_FACE));
+		writeD(0x00);
+        
+        writeD(0x00); //changes the text above CP on Status Window
+        writeD(0x00);
+        
+        writeD(_cha.getAppearance().getNameColor());
+        
+        writeD(0x00);
 	}
 
 	/*

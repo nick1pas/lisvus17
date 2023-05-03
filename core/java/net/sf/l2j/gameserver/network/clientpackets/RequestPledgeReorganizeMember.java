@@ -12,33 +12,30 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.sf.l2j.gameserver.network.serverpackets;
+package net.sf.l2j.gameserver.network.clientpackets;
 
-public class ChooseInventoryItem extends L2GameServerPacket
+public class RequestPledgeReorganizeMember extends L2GameClientPacket
 {
-	private static final String _S__6F_CHOOSEINVENTORYITEM = "[S] 6f ChooseInventoryItem";
-	
-	private final int _itemId;
-	
-	public ChooseInventoryItem(int itemId)
+    private static final String _C__D0_24_REQUESTPLEDGEREORGANIZEMEMBER = "[C] D0:24 RequestPledgeReorganizeMember";
+
+    @Override
+	protected void readImpl()
 	{
-		_itemId = itemId;
+		readD();
+		readS();
+		readD();
+		readS();
 	}
 	
 	@Override
-	protected final void writeImpl()
+	protected void runImpl()
 	{
-		writeC(0x6f);
-		writeD(_itemId);
+		// Not implemented since subpledges are not supported
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see net.sf.l2j.gameserver.serverpackets.L2GameServerPacket#getType()
-	 */
-	@Override
+
+    @Override
 	public String getType()
 	{
-		return _S__6F_CHOOSEINVENTORYITEM;
+		return _C__D0_24_REQUESTPLEDGEREORGANIZEMEMBER;
 	}
 }

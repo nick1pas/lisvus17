@@ -17,8 +17,6 @@ package net.sf.l2j.gameserver.network.serverpackets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.Config;
-
 /**
  * MagicEffectIcons format h (dhd)
  * @version $Revision: 1.3.2.1.2.6 $ $Date: 2005/04/05 19:41:08 $
@@ -27,7 +25,6 @@ public class MagicEffectIcons extends L2GameServerPacket
 {
 	private static final String _S__97_MAGICEFFECTICONS = "[S] 7f MagicEffectIcons";
 	private List<Effect> _effects;
-	private int _extraSlot = 0;
 
 	class Effect
 	{
@@ -50,19 +47,7 @@ public class MagicEffectIcons extends L2GameServerPacket
 
 	public void addEffect(int skillId, int level, int duration)
 	{
-		/**
-		 * Override slots if effects exceed the number of buffs per slot * 3, since
-		 * client cannot support more visible effects. :)
-		 */
-		int size = Config.BUFF_SLOTS_PER_ROW * 3;
-		if (_effects.size() >= size)
-		{
-			_effects.set(_extraSlot++, new Effect(skillId, level, duration));
-		}
-		else
-		{
-			_effects.add(new Effect(skillId, level, duration));
-		}
+		_effects.add(new Effect(skillId, level, duration));
 	}
 
 	@Override

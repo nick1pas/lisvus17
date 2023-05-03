@@ -24,8 +24,8 @@ import net.sf.l2j.gameserver.model.L2Summon;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PlayableInstance;
 import net.sf.l2j.gameserver.model.base.Experience;
-import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
+import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
 
 public class AdminLevel implements IAdminCommandHandler
 {
@@ -83,9 +83,7 @@ public class AdminLevel implements IAdminCommandHandler
             		if (pXp > tXp)
             		{
             			targetPlayer.removeExpAndSp(pXp - tXp, 0);
-            			StatusUpdate su = new StatusUpdate(targetPlayer.getObjectId());
-            			su.addAttribute(StatusUpdate.EXP, Experience.getVisualExp(targetPlayer.getLevel(), targetPlayer.getExp()));
-            			targetPlayer.sendPacket(su);
+                        targetPlayer.sendPacket(new UserInfo(targetPlayer));
             		}
             		else if (pXp < tXp)
             		{

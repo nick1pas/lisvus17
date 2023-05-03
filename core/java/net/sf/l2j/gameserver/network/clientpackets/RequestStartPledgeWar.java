@@ -61,7 +61,7 @@ public class RequestStartPledgeWar extends L2GameClientPacket
 			return;
 		}
 		
-		if ((player.getClanPrivileges() & L2Clan.CP_CL_CLAN_WAR) != L2Clan.CP_CL_CLAN_WAR)
+		if ((player.getClanPrivileges() & L2Clan.CP_CL_PLEDGE_WAR) != L2Clan.CP_CL_PLEDGE_WAR)
 		{
 			player.sendMessage("You are not authorized to manage clan wars.");
 			player.sendPacket(new ActionFailed());

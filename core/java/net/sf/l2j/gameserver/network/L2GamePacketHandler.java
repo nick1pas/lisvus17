@@ -761,6 +761,24 @@ public final class L2GamePacketHandler implements IPacketHandler<L2GameClient>, 
 							case 0x13:
 								msg = new RequestOlympiadMatchList();
 								break;
+							case 0x1a:
+								msg = new RequestPledgePowerGradeList();
+								break;
+							case 0x1b:
+								msg = new RequestPledgeMemberPowerInfo();
+								break;
+							case 0x1c:
+								msg = new RequestPledgeSetMemberPowerGrade();
+								break;
+							case 0x1d:
+								msg = new RequestPledgeMemberInfo();
+								break;
+							case 0x1e:
+								msg = new RequestPledgeWarList();
+								break;
+							case 0x24:
+								msg = new RequestPledgeReorganizeMember();
+								break;
 							default:
 								printDebugDoubleOpcode(opcode, id2, buf, state, client);
 								break;

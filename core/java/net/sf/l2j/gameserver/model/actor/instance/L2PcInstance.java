@@ -223,9 +223,9 @@ public final class L2PcInstance extends L2PlayableInstance
 	private static final String RESTORE_SKILL_SAVE_ALT_SUBCLASS = "SELECT skill_id,skill_level,reuse_delay,systime FROM character_skills_save WHERE char_obj_id=? AND restore_type=1 ORDER BY buff_index ASC";
 	private static final String DELETE_SKILL_SAVE = "DELETE FROM character_skills_save WHERE char_obj_id=? AND class_index=?";
 	
-	private static final String INSERT_CHARACTER = "INSERT INTO characters (account_name,obj_Id,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp,face,hairStyle,hairColor,sex,exp,sp,karma,pvpkills,pkkills,clanid,race,classid,deletetime,cancraft,title,accesslevel,online,clan_privs,wantspeace,base_class,nobless,last_recom_date) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,sp=?,karma=?,pvpkills=?,pkkills=?,rec_have=?,rec_left=?,clanid=?,race=?,classid=?,deletetime=?,title=?,accesslevel=?,online=?,clan_privs=?,wantspeace=?,clan_join_expiry_time=?,clan_create_expiry_time=?,base_class=?,onlinetime=?,punish_level=?,punish_timer=?,nobless=?,last_recom_date=?,varka_ketra_ally=?,aio_buffer=?,newbie_at=?,char_name=? WHERE obj_Id=?";
-	private static final String RESTORE_CHARACTER = "SELECT account_name, obj_Id, char_name, name_color, level, maxHp, curHp, maxCp, curCp, maxMp, curMp, face, hairStyle, hairColor, sex, heading, x, y, z, exp, sp, karma, pvpkills, pkkills, clanid, race, classid, deletetime, cancraft, title, rec_have, rec_left, accesslevel, online, char_slot, lastAccess, clan_privs, wantspeace, clan_join_expiry_time, clan_create_expiry_time, base_class, onlinetime, punish_level, punish_timer, nobless, last_recom_date, varka_ketra_ally, aio_buffer, newbie_at FROM characters WHERE obj_Id=?";
+	private static final String INSERT_CHARACTER = "INSERT INTO characters (account_name,obj_Id,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp,face,hairStyle,hairColor,sex,exp,sp,karma,pvpkills,pkkills,clanid,race,classid,deletetime,cancraft,title,accesslevel,online,power_grade,wantspeace,base_class,nobless,last_recom_date) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,face=?,hairStyle=?,hairColor=?,sex=?,heading=?,x=?,y=?,z=?,exp=?,sp=?,karma=?,pvpkills=?,pkkills=?,rec_have=?,rec_left=?,clanid=?,race=?,classid=?,deletetime=?,title=?,accesslevel=?,online=?,power_grade=?,wantspeace=?,clan_join_expiry_time=?,clan_create_expiry_time=?,base_class=?,onlinetime=?,punish_level=?,punish_timer=?,nobless=?,last_recom_date=?,varka_ketra_ally=?,aio_buffer=?,newbie_at=?,char_name=? WHERE obj_Id=?";
+	private static final String RESTORE_CHARACTER = "SELECT account_name, obj_Id, char_name, name_color, level, maxHp, curHp, maxCp, curCp, maxMp, curMp, face, hairStyle, hairColor, sex, heading, x, y, z, exp, sp, karma, pvpkills, pkkills, clanid, race, classid, deletetime, cancraft, title, rec_have, rec_left, accesslevel, online, char_slot, lastAccess, power_grade, wantspeace, clan_join_expiry_time, clan_create_expiry_time, base_class, onlinetime, punish_level, punish_timer, nobless, last_recom_date, varka_ketra_ally, aio_buffer, newbie_at FROM characters WHERE obj_Id=?";
 	private static final String RESTORE_CHAR_SUBCLASSES = "SELECT class_id,exp,sp,level,class_index FROM character_subclasses WHERE char_obj_id=? ORDER BY class_index ASC";
 	private static final String ADD_CHAR_SUBCLASS = "INSERT INTO character_subclasses (char_obj_id,class_id,exp,sp,level,class_index) VALUES (?,?,?,?,?,?)";
 	private static final String UPDATE_CHAR_SUBCLASS = "UPDATE character_subclasses SET exp=?,sp=?,level=?,class_id=? WHERE char_obj_id=? AND class_index =?";
@@ -399,7 +399,8 @@ public final class L2PcInstance extends L2PlayableInstance
 	/** The id of castle which the L2PcInstance is registered for siege */
 	private int _siegeSide = 0;
 	
-	private int _clanPrivileges = 0;
+	private int _clanPrivileges;
+	private int _powerGrade;
 	
 	public int _teleMode = 0;
 	
@@ -5784,6 +5785,7 @@ public final class L2PcInstance extends L2PlayableInstance
 		{
 			_clanId = 0;
 			_clanPrivileges = 0;
+			_powerGrade = 0;
 			_activeWarehouse = null;
 			return;
 		}
@@ -6335,7 +6337,7 @@ public final class L2PcInstance extends L2PlayableInstance
 			statement.setString(++i, getTitle());
 			statement.setInt(++i, getAccessLevel());
 			statement.setInt(++i, isOnline() ? 1 : 0);
-			statement.setInt(++i, getClanPrivileges());
+			statement.setInt(++i, getPowerGrade());
 			statement.setInt(++i, getWantsPeace());
 			statement.setInt(++i, getBaseClass());
 			statement.setInt(++i, isNoble() ? 1 : 0);
@@ -6402,9 +6404,6 @@ public final class L2PcInstance extends L2PlayableInstance
 					player.getStat().setLevel(rset.getByte("level"));
 					player.getStat().setSp(rset.getInt("sp"));
 					
-					player.setClanPrivileges(rset.getInt("clan_privs"));
-					player.setWantsPeace(rset.getInt("wantspeace"));
-					
 					player.setHeading(rset.getInt("heading"));
 					
 					player.setKarma(rset.getInt("karma"));
@@ -6444,11 +6443,35 @@ public final class L2PcInstance extends L2PlayableInstance
 					{
 						player.setClanCreateExpiryTime(0);
 					}
+
+					player.setWantsPeace(rset.getInt("wantspeace"));
 					
 					int clanId = rset.getInt("clanid");
 					if (clanId > 0)
 					{
-						player.setClan(ClanTable.getInstance().getClan(clanId));
+						final L2Clan clan = ClanTable.getInstance().getClan(clanId);
+						if (clan != null) {
+							player.setClan(clan);
+
+							final int powerGrade = rset.getInt("power_grade");
+							if (player.getClan().getLeaderId() != player.getObjectId())
+							{
+								if (powerGrade == 0) {
+									player.setPowerGrade(6);
+								} else {
+									player.setPowerGrade(powerGrade);
+								}
+								player.setClanPrivileges(player.getClan().getPrivilegesByRank(player.getPowerGrade()));
+							}
+							else
+							{
+								player.setClanPrivileges(L2Clan.CP_ALL);
+								player.setPowerGrade(1);
+							}
+						}
+						else {
+							player.setClanPrivileges(L2Clan.CP_NOTHING);
+						}
 					}
 					
 					player.setDeleteTimer(rset.getLong("deletetime"));
@@ -6842,7 +6865,7 @@ public final class L2PcInstance extends L2PlayableInstance
 			statement.setString(++i, getTitle());
 			statement.setInt(++i, getAccessLevel());
 			statement.setInt(++i, isOnline() ? 1 : 0);
-			statement.setInt(++i, getClanPrivileges());
+			statement.setInt(++i, getPowerGrade());
 			statement.setInt(++i, getWantsPeace());
 			statement.setLong(++i, getClanJoinExpiryTime());
 			statement.setLong(++i, getClanCreateExpiryTime());
@@ -9046,15 +9069,25 @@ public final class L2PcInstance extends L2PlayableInstance
 			
 		}
 	}
+
+	public int getPowerGrade()
+	{
+		return _powerGrade;
+	}
+	
+	public void setPowerGrade(int powerGrade)
+	{
+		_powerGrade = powerGrade;
+	}
 	
 	public int getClanPrivileges()
 	{
 		return _clanPrivileges;
 	}
 	
-	public void setClanPrivileges(int n)
+	public void setClanPrivileges(int privileges)
 	{
-		_clanPrivileges = n;
+		_clanPrivileges = privileges;
 	}
 	
 	@Override

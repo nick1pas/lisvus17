@@ -347,7 +347,7 @@ public class AdminEditChar implements IAdminCommandHandler
 				
 				if (player.getClan() != null)
 				{
-					player.getClan().broadcastToOnlineMembers(new PledgeShowMemberListAll(player.getClan(), player));
+					player.getClan().broadcastToOnlineMembers(new PledgeShowMemberListAll(player.getClan()));
 				}
 				
 				player.leaveParty();

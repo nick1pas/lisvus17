@@ -539,6 +539,7 @@ character_skills_save.sql
 character_subclasses.sql
 characters.sql
 clan_data.sql
+clan_privs.sql
 clan_wars.sql
 clanhall.sql
 clanhall_functions.sql

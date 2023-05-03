@@ -83,24 +83,39 @@ public class L2Clan
 
     private final ItemContainer _warehouse = new ClanWarehouse(this);
     private final Set<Integer> _atWarWith = ConcurrentHashMap.newKeySet();
+    private final Set<Integer> _atWarAttackers = ConcurrentHashMap.newKeySet();
+    private final Map<Integer, Integer> _privileges = new ConcurrentHashMap<>();
 
 	private boolean _hasCrestLarge;
 	private Forum _forum;
 
     //  Clan Privileges
-	public static final int CP_NOTHING = 0;           // No privileges
-	public static final int CP_CL_JOIN_CLAN = 1;      // Join clan
-	public static final int CP_CL_GIVE_TITLE = 2;     // Give a title
-	public static final int CP_CL_VIEW_WAREHOUSE = 4; // View warehouse content
-	public static final int CP_CL_MANAGE_CREST = 8; // Manage clan crest
-    public static final int CP_CH_OPEN_DOOR = 16;     // Open clan hall doors
-	public static final int CP_CH_OTHER_RIGHTS = 32;  // Function adding/restoration
-    public static final int CP_CH_DISMISS = 64;      // Expel outsiders
-	public static final int CP_CS_OPEN_DOOR = 128;    // Open castle doors
-	public static final int CP_CS_OTHER_RIGHTS = 256; // (not fully implemented yet)Function adding/restoration, related to manors, mercenary placement
-	public static final int CP_CS_DISMISS = 512;     // Expel outsiders
-	public static final int CP_CL_CLAN_WAR = 1024;     // Clan war
-	public static final int CP_ALL = 2047;            // All privileges
+	public static final int CP_NOTHING = 0;
+	public static final int CP_CL_JOIN_CLAN = 2;
+	public static final int CP_CL_GIVE_TITLE = 4;
+	public static final int CP_CL_VIEW_WAREHOUSE = 8;
+	public static final int CP_CL_MANAGE_RANKS = 16;
+	public static final int CP_CL_PLEDGE_WAR = 32;
+	public static final int CP_CL_DISMISS = 64;
+	public static final int CP_CL_REGISTER_CREST = 128;
+	public static final int CP_CL_MASTER_RIGHTS = 256;
+	public static final int CP_CL_MANAGE_LEVELS = 512;
+	public static final int CP_CH_OPEN_DOOR = 1024;
+	public static final int CP_CH_USE_FUNCTIONS = 2048;
+	public static final int CP_CH_AUCTION = 4096;
+	public static final int CP_CH_DISMISS = 8192;
+	public static final int CP_CH_SET_FUNCTIONS = 16384;
+	public static final int CP_CS_OPEN_DOOR = 32768;
+	public static final int CP_CS_MANOR_ADMIN = 65536;
+	public static final int CP_CS_MANAGE_SIEGE = 131072;
+	public static final int CP_CS_USE_FUNCTIONS = 262144;
+	public static final int CP_CS_DISMISS = 524288;
+	public static final int CP_CS_TAXES = 1048576;
+	public static final int CP_CS_MERCENARIES = 2097152;
+	public static final int CP_CS_SET_FUNCTIONS = 4194304;
+	public static final int CP_ALL = 8388606;
+
+    public static final int RANK_COUNT = 6;
 
     /**
      * called if a clan is referenced only by id.
@@ -110,21 +125,23 @@ public class L2Clan
     public L2Clan(int clanId)
     {
         _clanId = clanId;
+        initializePrivileges();
+
         restore();
         getWarehouse().restore();
     }
     
     /**
-     * this is only called if a new clan is created
+     * This is only called if a new clan is created
+     * 
      * @param clanId
      * @param clanName
-     * @param leader
      */
-    public L2Clan(int clanId, String clanName, L2ClanMember leader)
+    public L2Clan(int clanId, String clanName)
     {
         _clanId = clanId;
         _name = clanName;
-        setLeader(leader);
+        initializePrivileges();
     }
     
 	/**
@@ -199,7 +216,6 @@ public class L2Clan
 	public void addClanMember(L2PcInstance player)
 	{
 		L2ClanMember member = new L2ClanMember(player);
-
 		addClanMember(member);
 	}
 
@@ -426,6 +442,14 @@ public class L2Clan
 	{
 		return (id == 0 ? false :_members.containsKey(id));
 	}
+
+    public void initializePrivileges()
+    {
+    	for (int i = 1; i <= RANK_COUNT; i++)
+    	{
+    		_privileges.put(i, CP_NOTHING);
+    	}
+    }
 	
 	public void updateClanInDB()
 	{
@@ -483,7 +507,7 @@ public class L2Clan
     private void removeMemberFromDB(L2ClanMember member, long clanJoinExpiryTime, long clanCreateExpiryTime)
     {
         try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-            PreparedStatement statement = con.prepareStatement("UPDATE characters SET clanid=0, title=?, clan_join_expiry_time=?, clan_create_expiry_time=?, clan_privs=0, wantspeace=0 WHERE obj_Id=?"))
+            PreparedStatement statement = con.prepareStatement("UPDATE characters SET clanid=0, title=?, clan_join_expiry_time=?, clan_create_expiry_time=?, power_grade=0, wantspeace=0 WHERE obj_Id=?"))
         {
             statement.setString(1, "");
             statement.setLong(2, clanJoinExpiryTime);
@@ -560,18 +584,34 @@ public class L2Clan
             }
 
             // Clan members
-            try (PreparedStatement statement = con.prepareStatement("SELECT char_name, level, classid, obj_Id FROM characters WHERE clanid=?"))
+            try (PreparedStatement statement = con.prepareStatement("SELECT char_name, level, classid, sex, race, power_grade, obj_Id FROM characters WHERE clanid=?"))
             {
                 statement.setInt(1, _clanId);
                 try (ResultSet rset = statement.executeQuery())
                 {
                     while (rset.next())
                     {
-                        L2ClanMember member = new L2ClanMember(rset.getString("char_name"), rset.getInt("level"), rset.getInt("classid"), rset.getInt("obj_id"));
+                        L2ClanMember member = new L2ClanMember(this, rset.getString("char_name"), rset.getInt("level"), rset.getInt("classid"), (rset.getInt("sex") != 0), rset.getInt("race"), rset.getInt("power_grade"), rset.getInt("obj_id"));
                         if (member.getObjectId() == leaderId)
                             setLeader(member);
                         else
                             addClanMember(member);
+                    }
+                }
+            }
+
+            // Ranking privileges
+            try (PreparedStatement statement = con.prepareStatement("SELECT ranking, privs FROM clan_privs WHERE clan_id=?"))
+            {
+                statement.setInt(1, _clanId);
+                try (ResultSet rset = statement.executeQuery())
+                {
+                    while(rset.next())
+                    {
+                        int ranking = rset.getInt("ranking");
+                        if (ranking <= RANK_COUNT) {
+                            _privileges.put(ranking, rset.getInt("privs"));
+                        }
                     }
                 }
             }
@@ -621,6 +661,54 @@ public class L2Clan
 			}
 		}
 	}
+
+    public final Map<Integer, Integer> getPrivileges()
+	{
+		return _privileges;
+	}
+	
+	public int getPrivilegesByRank(int ranking)
+	{
+		return _privileges.getOrDefault(ranking, CP_NOTHING);
+	}
+	
+	/**
+	 * Update ranks privileges.
+	 * @param ranking : The ranking to edit.
+	 * @param privs : The privileges to be set.
+	 */
+	public void setPrivilegesForRanking(int ranking, int privs)
+	{
+		// Avoid to bother with invalid rankings.
+		if (!_privileges.containsKey(ranking))
+			return;
+		
+		// Replace the privileges.
+		_privileges.put(ranking, privs);
+		
+		// Refresh online members privileges.
+		for (L2PcInstance member : getOnlineMembers(0))
+		{
+			if (member.getPowerGrade() == ranking)
+				member.setClanPrivileges(privs);
+		}
+		broadcastClanStatus();
+		
+		// Update database.
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
+			PreparedStatement statement = con.prepareStatement("INSERT INTO clan_privs (clan_id, ranking, privs) VALUES (?,?,?) ON DUPLICATE KEY UPDATE privs=VALUES(privs)"))
+		{
+			statement.setInt(1, _clanId);
+			statement.setInt(2, ranking);
+			statement.setInt(3, privs);
+			statement.executeUpdate();
+		}
+		catch (Exception e)
+		{
+			_log.warning("Error while storing ranking privileges" + e);
+		}
+	}
+
 	
 	@Override
 	public String toString()
@@ -661,9 +749,34 @@ public class L2Clan
     	return _atWarWith.contains(clanId);
     }
 
+    public boolean isAtWarAttacker(int id)
+	{
+		return _atWarAttackers.contains(id);
+	}
+
+    public Set<Integer> getWarList()
+	{
+		return _atWarWith;
+	}
+
+    public Set<Integer> getAttackerList()
+	{
+		return _atWarAttackers;
+	}
+
+    public void setAttackerClan(int clanId)
+	{
+		_atWarAttackers.add(clanId);
+	}
+
     public void setEnemyClan(int clanId)
     {
     	_atWarWith.add(clanId);
+    }
+
+    public void deleteAttackerClan(int clanId)
+    {
+    	_atWarAttackers.remove(clanId);
     }
 
     public void deleteEnemyClan(int clanId)
@@ -691,7 +804,7 @@ public class L2Clan
     	for (L2PcInstance member : getOnlineMembers(0))
         {
         	member.sendPacket(new PledgeShowMemberListDeleteAll());
-        	member.sendPacket(new PledgeShowMemberListAll(this, member));
+        	member.sendPacket(new PledgeShowMemberListAll(this));
         }
     }
 

@@ -22,10 +22,9 @@ import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.GMAudit;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.base.Experience;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
-import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
+import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
 
 /**
  * This class handles following admin commands:
@@ -204,11 +203,7 @@ public class AdminExpSp implements IAdminCommandHandler
             player.sendMessage("Admin is removing you " + expVal + " xp and " + spVal + " sp.");
             
             player.removeExpAndSp(expVal, spVal);
-            
-            StatusUpdate su = new StatusUpdate(player.getObjectId());
-            su.addAttribute(StatusUpdate.EXP, Experience.getVisualExp(player.getLevel(), player.getExp()));
-    		su.addAttribute(StatusUpdate.SP, player.getSp());
-    		player.sendPacket(su);
+            player.sendPacket(new UserInfo(player));
     
             // Admin information 
             activeChar.sendMessage("Removed " + expVal + " xp and " + spVal + " sp from " + player.getName() + ".");

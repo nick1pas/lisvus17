@@ -37,9 +37,10 @@ public class PledgeShowMemberListAdd extends L2GameServerPacket
 		writeS(_player.getName());
 		writeD(_player.getLevel());
 		writeD(_player.getClassId().getId());
-		writeD(0);
-		writeD(1);
+		writeD(_player.getAppearance().getSex() ? 1 : 0);
+		writeD(_player.getRace().ordinal());
 		writeD(_player.isOnline() && !_player.inOfflineMode() ? _player.getObjectId() : 0); // 1=online 0=offline
+		writeD(0);
 	}
 	
 	/*
