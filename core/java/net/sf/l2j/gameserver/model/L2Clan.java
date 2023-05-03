@@ -679,22 +679,25 @@ public class L2Clan
 	 */
 	public void setPrivilegesForRanking(int ranking, int privs)
 	{
-		// Avoid to bother with invalid rankings.
+		// Avoid to bother with invalid rankings
 		if (!_privileges.containsKey(ranking))
 			return;
 		
-		// Replace the privileges.
+		// Replace the privileges
 		_privileges.put(ranking, privs);
 		
-		// Refresh online members privileges.
+		// Refresh online members privileges
 		for (L2PcInstance member : getOnlineMembers(0))
 		{
 			if (member.getPowerGrade() == ranking)
-				member.setClanPrivileges(privs);
+            {
+                member.setClanPrivileges(privs);
+                member.sendPacket(new UserInfo(member));
+            }
 		}
 		broadcastClanStatus();
 		
-		// Update database.
+		// Update database
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
 			PreparedStatement statement = con.prepareStatement("INSERT INTO clan_privs (clan_id, ranking, privs) VALUES (?,?,?) ON DUPLICATE KEY UPDATE privs=VALUES(privs)"))
 		{
