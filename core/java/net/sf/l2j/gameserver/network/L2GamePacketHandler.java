@@ -798,6 +798,11 @@ public final class L2GamePacketHandler implements IPacketHandler<L2GameClient>, 
 	{
 		// Check for unknown packet flood
 		client.getStat().countUnknownPackets();
+
+		if (!Config.PACKET_HANDLER_DEBUG)
+		{
+			return;
+		}
 		
 		int size = buf.remaining();
 		_log.warning("Unknown Packet: " + Integer.toHexString(opcode) + " on State: " + state.name() + " Client: " + client.toString());
@@ -810,6 +815,11 @@ public final class L2GamePacketHandler implements IPacketHandler<L2GameClient>, 
 	{
 		// Check for unknown packet flood
 		client.getStat().countUnknownPackets();
+
+		if (!Config.PACKET_HANDLER_DEBUG)
+		{
+			return;
+		}
 		
 		int size = buf.remaining();
 		_log.warning("Unknown Packet: " + Integer.toHexString(opcode) + ":" + Integer.toHexString(id2) + " on State: " + state.name() + " Client: " + client.toString());

@@ -91,6 +91,7 @@ public final class Config
 	
 	/** Debug/release mode */
 	public static boolean DEBUG;
+	public static boolean PACKET_HANDLER_DEBUG;
 	/** Enable/disable assertions */
 	public static boolean ASSERT;
 	/** Enable/disable code 'in progress' */
@@ -985,6 +986,9 @@ public final class Config
 	public static int BLESSED_ENCHANT_CHANCE_WEAPON;
 	public static int BLESSED_ENCHANT_CHANCE_ARMOR;
 	public static int BLESSED_ENCHANT_CHANCE_JEWELRY;
+	public static int CRYSTAL_ENCHANT_CHANCE_WEAPON;
+	public static int CRYSTAL_ENCHANT_CHANCE_ARMOR;
+	public static int CRYSTAL_ENCHANT_CHANCE_JEWELRY;
 	/** Maximum level of enchantment */
 	public static int ENCHANT_MAX_WEAPON;
 	public static int ENCHANT_MAX_ARMOR;
@@ -1380,6 +1384,7 @@ public final class Config
 			DISPLAY_SERVER_VERSION = Boolean.parseBoolean(optionsSettings.getProperty("DisplayServerVersion", "false"));
 			
 			DEBUG = Boolean.parseBoolean(optionsSettings.getProperty("Debug", "false"));
+			PACKET_HANDLER_DEBUG = Boolean.parseBoolean(optionsSettings.getProperty("PacketHandlerDebug", "false"));
 			ASSERT = Boolean.parseBoolean(optionsSettings.getProperty("Assert", "false"));
 			DEVELOPER = Boolean.parseBoolean(optionsSettings.getProperty("Developer", "false"));
 			ACCEPT_GEOEDITOR_CONN = Boolean.parseBoolean(optionsSettings.getProperty("AcceptGeoeditorConn", "False"));
@@ -1602,6 +1607,9 @@ public final class Config
 			BLESSED_ENCHANT_CHANCE_WEAPON = Integer.parseInt(otherSettings.getProperty("BlessedEnchantChanceWeapon", "68"));
 			BLESSED_ENCHANT_CHANCE_ARMOR = Integer.parseInt(otherSettings.getProperty("BlessedEnchantChanceArmor", "52"));
 			BLESSED_ENCHANT_CHANCE_JEWELRY = Integer.parseInt(otherSettings.getProperty("BlessedEnchantChanceJewelry", "54"));
+			CRYSTAL_ENCHANT_CHANCE_WEAPON = Integer.parseInt(otherSettings.getProperty("CrystalEnchantChanceWeapon", "68"));
+			CRYSTAL_ENCHANT_CHANCE_ARMOR = Integer.parseInt(otherSettings.getProperty("CrystalEnchantChanceArmor", "52"));
+			CRYSTAL_ENCHANT_CHANCE_JEWELRY = Integer.parseInt(otherSettings.getProperty("CrystalEnchantChanceJewelry", "54"));
 			/* limit on enchant */
 			ENCHANT_MAX_WEAPON = Integer.parseInt(otherSettings.getProperty("EnchantMaxWeapon", "25"));
 			ENCHANT_MAX_ARMOR = Integer.parseInt(otherSettings.getProperty("EnchantMaxArmor", "25"));
@@ -2373,6 +2381,7 @@ public final class Config
 			ACCEPT_CHAOTIC_THRONE_CLIENTS = Boolean.parseBoolean(serverSettings.getProperty("AcceptChaoticThroneClients", "False"));
 			
 			DEBUG = Boolean.parseBoolean(serverSettings.getProperty("Debug", "false"));
+			PACKET_HANDLER_DEBUG = Boolean.parseBoolean(serverSettings.getProperty("PacketHandlerDebug", "false"));
 			DEVELOPER = Boolean.parseBoolean(serverSettings.getProperty("Developer", "false"));
 			ASSERT = Boolean.parseBoolean(serverSettings.getProperty("Assert", "false"));
 			
