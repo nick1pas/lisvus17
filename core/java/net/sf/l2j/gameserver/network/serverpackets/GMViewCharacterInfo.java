@@ -17,9 +17,6 @@ package net.sf.l2j.gameserver.network.serverpackets;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 
-/**
- * @version $Revision: 1.2.2.2.2.8 $ $Date: 2005/03/27 15:29:39 $
- */
 public class GMViewCharacterInfo extends L2GameServerPacket
 {
 	private static final String _S__04_USERINFO = "[S] 8F GMViewCharacterInfo";
