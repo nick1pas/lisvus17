@@ -813,12 +813,16 @@ public final class L2PcInstance extends L2PlayableInstance
 			result |= RelationChanged.RELATION_LEADER;
 		}
 		
-		if ((getParty() != null) && (getParty() == target.getParty()))
+		if (getParty() != null && getParty() == target.getParty())
 		{
+			List<L2PcInstance> partyMembers = getParty().getPartyMembers();
+
 			result |= RelationChanged.RELATION_HAS_PARTY;
-			for (int i = 0; i < getParty().getPartyMembers().size(); i++)
+
+			int size = partyMembers.size();
+			for (int i = 0; i < size; i++)
 			{
-				if (getParty().getPartyMembers().get(i) != this)
+				if (partyMembers.get(i) != this)
 				{
 					continue;
 				}
