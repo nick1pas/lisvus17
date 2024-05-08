@@ -1,8 +1,8 @@
-# Docker files for the server
+# Solution to start the server in docker
 
-## Put docker files into compiled project directory
+## 1. Put docker files into compiled project directory
 
-## Before starting docker-compose file need to :
+## 2. Before starting docker-compose file need to :
 
 1. Patch `gameserver\config\GameServer.propertie`s (change mysql server address):
 ```
@@ -28,7 +28,7 @@ docker-compose up -d
 ```
 
 ##
-After the first start login to l2adminer (via http on port 8081 on the machine were it was started) or directly to mariadb server and create databases (use sql files from a build)
+3. After the first start login to l2adminer (via http on port 8081 on the machine were it was started) or directly to mariadb server and create databases (use sql files from a build)
 Open in a browser `IP-address:8081`, for example `127.0.0.1:8081`.
 Restart the server:
 ```
