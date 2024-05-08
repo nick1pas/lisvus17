@@ -1,0 +1,7 @@
+FROM openjdk:17-jdk-slim
+
+COPY gameserver /opt/gameserver
+COPY libs /opt/libs
+
+WORKDIR /opt/gameserver
+CMD ["sh", "GameServer_loop.sh"]

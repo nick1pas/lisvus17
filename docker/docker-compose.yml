@@ -1,0 +1,64 @@
+version: "3.7"
+
+services:
+  l2login:
+    image: "l2login"
+    build:
+      context: .
+      dockerfile: Dockerfile.login
+    restart: "always"
+    container_name: "l2login"
+    cap_add:
+      - SYS_NICE
+    ports:
+      - "2106:2106"
+    networks:
+      - "l2_net"
+    volumes:
+      - "/var/volumes-data/lineage2/login/log:/opt/login/log"
+      - "./login/config:/opt/login/config"
+    depends_on:
+      - "l2mariadb"
+
+  l2game:
+    image: "l2gameserver"
+    build:
+      context: .
+      dockerfile: Dockerfile.gameserver
+    restart: "always"
+    container_name: "l2gameserver"
+    ports:
+      - "7777:7777"
+    networks:
+      - "l2_net"
+    volumes:
+      - "/var/volumes-data/lineage2/gameserver/log:/opt/gameserver/log"
+      - "./gameserver/config:/opt/gameserver/config"
+    depends_on:
+      - "l2mariadb"
+
+  l2mariadb:
+    image: "mariadb:latest"
+    restart: "always"
+    container_name: "l2mariadb"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    networks:
+      - "l2_net"
+    volumes:
+      - "/var/volumes-data/lineage2/db:/var/lib/mysql"
+
+  l2adminer:
+    image: "adminer"
+    restart: "always"
+    container_name: "l2adminer"
+    ports:
+      - "8081:8080"
+    networks:
+      - "l2_net"
+    depends_on:
+      - "l2mariadb"
+
+networks:
+  l2_net:
+    name: "l2_net"
