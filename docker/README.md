@@ -4,8 +4,10 @@
 
 ## 2. Before starting docker-compose file need to :
 
-1. Patch `gameserver\config\GameServer.propertie`s (change mysql server address):
+1. Patch `gameserver\config\GameServer.propertie`s (change mysql and login servers address):
 ```
+LoginHost=l2login
+
 URL=jdbc:mariadb://l2mariadb/l2jdb?useSSL=false
 ```
 2. Patch `login\config\LoginServer.properties` (change mysql server address):
