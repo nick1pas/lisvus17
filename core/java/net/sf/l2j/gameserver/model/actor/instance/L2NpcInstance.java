@@ -312,6 +312,12 @@ public class L2NpcInstance extends L2Character
 	{
 		return (L2NpcTemplate) super.getTemplate();
 	}
+
+	@Override
+	public double getLevelMod()
+	{
+		return ((100.0 - 11) + getLevel()) / 100.0;
+	}
 	
 	/**
 	 * Return the generic Identifier of this L2NpcInstance contained in the L2NpcTemplate.<BR>

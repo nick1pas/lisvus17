@@ -80,7 +80,7 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			env.value += env.player.getLevel() / 3;
+			env.value += env.character.getLevel() / 3;
 		}
 	}
 	
@@ -106,7 +106,7 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			env.value *= env.player.getLevelMod();
+			env.value *= env.character.getLevelMod();
 		}
 	}
 	
@@ -176,7 +176,7 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			env.value *= BaseStats.STR.calcBonus(env.player) * env.player.getLevelMod();
+			env.value *= BaseStats.STR.calcBonus(env.character) * env.character.getLevelMod();
 		}
 	}
 	
@@ -197,8 +197,8 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			double intb = BaseStats.INT.calcBonus(env.player);
-			double lvlb = env.player.getLevelMod();
+			double intb = BaseStats.INT.calcBonus(env.character);
+			double lvlb = env.character.getLevelMod();
 			env.value *= (lvlb * lvlb) * (intb * intb);
 		}
 	}
@@ -220,31 +220,45 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			if (env.player instanceof L2PcInstance)
+			if (env.character instanceof L2DoorInstance)
 			{
-				L2PcInstance p = (L2PcInstance) env.player;
-				if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LFINGER) != null)
+				if (SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE) == SevenSigns.CABAL_DAWN)
 				{
-					env.value -= 5;
+					env.value *= Config.ALT_SIEGE_DAWN_GATES_MDEF_MULT;
 				}
-				if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_RFINGER) != null)
+				else if (SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE) == SevenSigns.CABAL_DUSK)
 				{
-					env.value -= 5;
-				}
-				if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LEAR) != null)
-				{
-					env.value -= 9;
-				}
-				if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_REAR) != null)
-				{
-					env.value -= 9;
-				}
-				if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_NECK) != null)
-				{
-					env.value -= 13;
+					env.value *= Config.ALT_SIEGE_DUSK_GATES_MDEF_MULT;
 				}
 			}
-			env.value *= BaseStats.MEN.calcBonus(env.player) * env.player.getLevelMod();
+			else
+			{
+				if (env.character instanceof L2PcInstance)
+				{
+					L2PcInstance p = (L2PcInstance) env.character;
+					if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LFINGER) != null)
+					{
+						env.value -= 5;
+					}
+					if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_RFINGER) != null)
+					{
+						env.value -= 5;
+					}
+					if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LEAR) != null)
+					{
+						env.value -= 9;
+					}
+					if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_REAR) != null)
+					{
+						env.value -= 9;
+					}
+					if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_NECK) != null)
+					{
+						env.value -= 13;
+					}
+				}
+				env.value *= BaseStats.MEN.calcBonus(env.character) * env.character.getLevelMod();
+			}
 		}
 	}
 	
@@ -265,34 +279,48 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			if (env.player instanceof L2PcInstance)
+			if (env.character instanceof L2DoorInstance)
 			{
-				L2PcInstance p = (L2PcInstance) env.player;
-				
-				boolean hasMagePDef = (p.getClassId().isMage() || (p.getClassId().getId() == 0x31));
-				
-				if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_HEAD) != null)
+				if (SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE) == SevenSigns.CABAL_DAWN)
 				{
-					env.value -= 12;
+					env.value *= Config.ALT_SIEGE_DAWN_GATES_PDEF_MULT;
 				}
-				if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST) != null)
+				else if (SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE) == SevenSigns.CABAL_DUSK)
 				{
-					env.value -= hasMagePDef ? 15 : 31;
-				}
-				if ((p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LEGS) != null) || ((p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST) != null) && (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR)))
-				{
-					env.value -= hasMagePDef ? 8 : 18;
-				}
-				if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_GLOVES) != null)
-				{
-					env.value -= 8;
-				}
-				if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_FEET) != null)
-				{
-					env.value -= 7;
+					env.value *= Config.ALT_SIEGE_DUSK_GATES_PDEF_MULT;
 				}
 			}
-			env.value *= env.player.getLevelMod();
+			else
+			{
+				if (env.character instanceof L2PcInstance)
+				{
+					L2PcInstance p = (L2PcInstance) env.character;
+					
+					boolean hasMagePDef = (p.getClassId().isMage() || (p.getClassId().getId() == 0x31));
+					
+					if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_HEAD) != null)
+					{
+						env.value -= 12;
+					}
+					if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST) != null)
+					{
+						env.value -= hasMagePDef ? 15 : 31;
+					}
+					if ((p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LEGS) != null) || ((p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST) != null) && (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST).getItem().getBodyPart() == L2Item.SLOT_FULL_ARMOR)))
+					{
+						env.value -= hasMagePDef ? 8 : 18;
+					}
+					if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_GLOVES) != null)
+					{
+						env.value -= 8;
+					}
+					if (p.getInventory().getPaperdollItem(Inventory.PAPERDOLL_FEET) != null)
+					{
+						env.value -= 7;
+					}
+				}
+				env.value *= env.character.getLevelMod();
+			}
 		}
 	}
 	
@@ -313,7 +341,7 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			L2Character p = env.player;
+			L2Character p = env.character;
 			// [Square(DEX)]*6 + lvl + weapon hit bonus;
 			env.value += Math.sqrt(p.getDEX()) * 6;
 			env.value += p.getLevel();
@@ -341,7 +369,7 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			L2Character p = env.player;
+			L2Character p = env.character;
 			// [Square(DEX)]*6 + lvl;
 			env.value += Math.sqrt(p.getDEX()) * 6;
 			env.value += p.getLevel();
@@ -365,7 +393,7 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			L2Character p = env.player;
+			L2Character p = env.character;
 			if (p instanceof L2SummonInstance)
 			{
 				env.value = 40;
@@ -404,7 +432,7 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			L2Character p = env.player;
+			L2Character p = env.character;
 			if (p instanceof L2Summon)
 			{
 				env.value = 5;
@@ -433,7 +461,7 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			env.value *= BaseStats.DEX.calcBonus(env.player);
+			env.value *= BaseStats.DEX.calcBonus(env.character);
 		}
 	}
 	
@@ -454,7 +482,7 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			env.value *= BaseStats.DEX.calcBonus(env.player);
+			env.value *= BaseStats.DEX.calcBonus(env.character);
 		}
 	}
 	
@@ -475,7 +503,7 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			env.value *= BaseStats.WIT.calcBonus(env.player);
+			env.value *= BaseStats.WIT.calcBonus(env.character);
 		}
 	}
 	
@@ -496,8 +524,8 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			// L2PcTemplate t = (L2PcTemplate)env.player.getTemplate();
-			L2PcInstance pc = (L2PcInstance) env.player;
+			// L2PcTemplate t = (L2PcTemplate)env.character.getTemplate();
+			L2PcInstance pc = (L2PcInstance) env.character;
 			if (pc != null)
 			{
 				env.value += pc.getHennaStatSTR();
@@ -522,8 +550,8 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			// L2PcTemplate t = (L2PcTemplate)env.player.getTemplate();
-			L2PcInstance pc = (L2PcInstance) env.player;
+			// L2PcTemplate t = (L2PcTemplate)env.character.getTemplate();
+			L2PcInstance pc = (L2PcInstance) env.character;
 			if (pc != null)
 			{
 				env.value += pc.getHennaStatDEX();
@@ -548,8 +576,8 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			// L2PcTemplate t = (L2PcTemplate)env.player.getTemplate();
-			L2PcInstance pc = (L2PcInstance) env.player;
+			// L2PcTemplate t = (L2PcTemplate)env.character.getTemplate();
+			L2PcInstance pc = (L2PcInstance) env.character;
 			if (pc != null)
 			{
 				env.value += pc.getHennaStatINT();
@@ -574,8 +602,8 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			// L2PcTemplate t = (L2PcTemplate)env.player.getTemplate();
-			L2PcInstance pc = (L2PcInstance) env.player;
+			// L2PcTemplate t = (L2PcTemplate)env.character.getTemplate();
+			L2PcInstance pc = (L2PcInstance) env.character;
 			if (pc != null)
 			{
 				env.value += pc.getHennaStatMEN();
@@ -600,8 +628,8 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			// L2PcTemplate t = (L2PcTemplate)env.player.getTemplate();
-			L2PcInstance pc = (L2PcInstance) env.player;
+			// L2PcTemplate t = (L2PcTemplate)env.character.getTemplate();
+			L2PcInstance pc = (L2PcInstance) env.character;
 			if (pc != null)
 			{
 				env.value += pc.getHennaStatCON();
@@ -626,8 +654,8 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			// L2PcTemplate t = (L2PcTemplate)env.player.getTemplate();
-			L2PcInstance pc = (L2PcInstance) env.player;
+			// L2PcTemplate t = (L2PcTemplate)env.character.getTemplate();
+			L2PcInstance pc = (L2PcInstance) env.character;
 			if (pc != null)
 			{
 				env.value += pc.getHennaStatWIT();
@@ -652,135 +680,135 @@ public final class Formulas
 		@Override
 		public void calc(Env env)
 		{
-			L2PcTemplate t = (L2PcTemplate) env.player.getTemplate();
-			int lvl = env.player.getLevel() - t.classBaseLevel;
+			L2PcTemplate t = (L2PcTemplate) env.character.getTemplate();
+			int lvl = env.character.getLevel() - t.classBaseLevel;
 			double hpmod = t.lvlHpMod * lvl;
 			double hpmax = (t.lvlHpAdd + hpmod) * lvl;
 			double hpmin = (t.lvlHpAdd * lvl) + hpmod;
 			env.value += (hpmax + hpmin) / 2;
 		}
 	}
-
+	
 	static class FuncMaxHpMul extends Func
 	{
 		static final FuncMaxHpMul _instance = new FuncMaxHpMul();
-
+		
 		static Func getInstance()
 		{
 			return _instance;
 		}
-
+		
 		private FuncMaxHpMul()
 		{
 			super(Stats.MAX_HP, 0x20, null);
 		}
-
+		
 		@Override
 		public void calc(Env env)
 		{
-			env.value *= BaseStats.CON.calcBonus(env.player);
+			env.value *= BaseStats.CON.calcBonus(env.character);
 		}
 	}
-
+	
 	static class FuncMaxCpAdd extends Func
 	{
 		static final FuncMaxCpAdd _instance = new FuncMaxCpAdd();
-
+		
 		static Func getInstance()
 		{
 			return _instance;
 		}
-
+		
 		private FuncMaxCpAdd()
 		{
 			super(Stats.MAX_CP, 0x10, null);
 		}
-
+		
 		@Override
 		public void calc(Env env)
 		{
-			L2PcTemplate t = (L2PcTemplate) env.player.getTemplate();
-			int lvl = env.player.getLevel() - t.classBaseLevel;
+			L2PcTemplate t = (L2PcTemplate) env.character.getTemplate();
+			int lvl = env.character.getLevel() - t.classBaseLevel;
 			double cpmod = t.lvlCpMod * lvl;
 			double cpmax = (t.lvlCpAdd + cpmod) * lvl;
 			double cpmin = (t.lvlCpAdd * lvl) + cpmod;
 			env.value += (cpmax + cpmin) / 2;
 		}
 	}
-
+	
 	static class FuncMaxCpMul extends Func
 	{
 		static final FuncMaxCpMul _instance = new FuncMaxCpMul();
-
+		
 		static Func getInstance()
 		{
 			return _instance;
 		}
-
+		
 		private FuncMaxCpMul()
 		{
 			super(Stats.MAX_CP, 0x20, null);
 		}
-
+		
 		@Override
 		public void calc(Env env)
 		{
-			env.value *= BaseStats.CON.calcBonus(env.player);
+			env.value *= BaseStats.CON.calcBonus(env.character);
 		}
 	}
-
+	
 	static class FuncMaxMpAdd extends Func
 	{
 		static final FuncMaxMpAdd _instance = new FuncMaxMpAdd();
-
+		
 		static Func getInstance()
 		{
 			return _instance;
 		}
-
+		
 		private FuncMaxMpAdd()
 		{
 			super(Stats.MAX_MP, 0x10, null);
 		}
-
+		
 		@Override
 		public void calc(Env env)
 		{
-			L2PcTemplate t = (L2PcTemplate) env.player.getTemplate();
-			int lvl = env.player.getLevel() - t.classBaseLevel;
+			L2PcTemplate t = (L2PcTemplate) env.character.getTemplate();
+			int lvl = env.character.getLevel() - t.classBaseLevel;
 			double mpmod = t.lvlMpMod * lvl;
 			double mpmax = (t.lvlMpAdd + mpmod) * lvl;
 			double mpmin = (t.lvlMpAdd * lvl) + mpmod;
 			env.value += (mpmax + mpmin) / 2;
 		}
 	}
-
+	
 	static class FuncMaxMpMul extends Func
 	{
 		static final FuncMaxMpMul _instance = new FuncMaxMpMul();
-
+		
 		static Func getInstance()
 		{
 			return _instance;
 		}
-
+		
 		private FuncMaxMpMul()
 		{
 			super(Stats.MAX_MP, 0x20, null);
 		}
-
+		
 		@Override
 		public void calc(Env env)
 		{
-			env.value *= BaseStats.MEN.calcBonus(env.player);
+			env.value *= BaseStats.MEN.calcBonus(env.character);
 		}
 	}
-
+	
 	public static Formulas getInstance()
 	{
 		return SingletonHolder._instance;
 	}
-
+	
 	/**
 	 * Return the period between 2 regeneration tasks (3s for L2Character, 5 min for L2DoorInstance).<BR>
 	 * <BR>
@@ -793,10 +821,10 @@ public final class Formulas
 		{
 			return HP_REGENERATE_PERIOD * 100; // 5 mins
 		}
-
+		
 		return HP_REGENERATE_PERIOD; // 3s
 	}
-
+	
 	/**
 	 * Return the standard NPC Calculator set containing ACCURACY_COMBAT and EVASION_RATE.<BR>
 	 * <BR>
@@ -814,6 +842,52 @@ public final class Formulas
 	{
 		Calculator[] std = new Calculator[Stats.NUM_STATS];
 		
+		std[Stats.MAX_HP.ordinal()] = new Calculator();
+		std[Stats.MAX_HP.ordinal()].addFunc(FuncMaxHpMul.getInstance());
+		
+		std[Stats.MAX_MP.ordinal()] = new Calculator();
+		std[Stats.MAX_MP.ordinal()].addFunc(FuncMaxMpMul.getInstance());
+		
+		std[Stats.POWER_ATTACK.ordinal()] = new Calculator();
+		std[Stats.POWER_ATTACK.ordinal()].addFunc(FuncPAtkMod.getInstance());
+		
+		std[Stats.MAGIC_ATTACK.ordinal()] = new Calculator();
+		std[Stats.MAGIC_ATTACK.ordinal()].addFunc(FuncMAtkMod.getInstance());
+		
+		std[Stats.POWER_DEFENCE.ordinal()] = new Calculator();
+		std[Stats.POWER_DEFENCE.ordinal()].addFunc(FuncPDefMod.getInstance());
+		
+		std[Stats.MAGIC_DEFENCE.ordinal()] = new Calculator();
+		std[Stats.MAGIC_DEFENCE.ordinal()].addFunc(FuncMDefMod.getInstance());
+		
+		std[Stats.CRITICAL_RATE.ordinal()] = new Calculator();
+		std[Stats.CRITICAL_RATE.ordinal()].addFunc(FuncAtkCritical.getInstance());
+		
+		std[Stats.MCRITICAL_RATE.ordinal()] = new Calculator();
+		std[Stats.MCRITICAL_RATE.ordinal()].addFunc(FuncMAtkCritical.getInstance());
+		
+		std[Stats.ACCURACY_COMBAT.ordinal()] = new Calculator();
+		std[Stats.ACCURACY_COMBAT.ordinal()].addFunc(FuncAtkAccuracy.getInstance());
+		
+		std[Stats.EVASION_RATE.ordinal()] = new Calculator();
+		std[Stats.EVASION_RATE.ordinal()].addFunc(FuncAtkEvasion.getInstance());
+		
+		std[Stats.POWER_ATTACK_SPEED.ordinal()] = new Calculator();
+		std[Stats.POWER_ATTACK_SPEED.ordinal()].addFunc(FuncPAtkSpeed.getInstance());
+		
+		std[Stats.MAGIC_ATTACK_SPEED.ordinal()] = new Calculator();
+		std[Stats.MAGIC_ATTACK_SPEED.ordinal()].addFunc(FuncMAtkSpeed.getInstance());
+		
+		std[Stats.RUN_SPEED.ordinal()] = new Calculator();
+		std[Stats.RUN_SPEED.ordinal()].addFunc(FuncMoveSpeed.getInstance());
+		
+		return std;
+	}
+	
+	public Calculator[] getStdDoorCalculators()
+	{
+		Calculator[] std = new Calculator[Stats.NUM_STATS];
+		
 		// Add the FuncAtkAccuracy to the Standard Calculator of ACCURACY_COMBAT
 		std[Stats.ACCURACY_COMBAT.ordinal()] = new Calculator();
 		std[Stats.ACCURACY_COMBAT.ordinal()].addFunc(FuncAtkAccuracy.getInstance());
@@ -821,6 +895,12 @@ public final class Formulas
 		// Add the FuncAtkEvasion to the Standard Calculator of EVASION_RATE
 		std[Stats.EVASION_RATE.ordinal()] = new Calculator();
 		std[Stats.EVASION_RATE.ordinal()].addFunc(FuncAtkEvasion.getInstance());
+		
+		std[Stats.POWER_DEFENCE.ordinal()] = new Calculator();
+		std[Stats.POWER_DEFENCE.ordinal()].addFunc(FuncPDefMod.getInstance());
+		
+		std[Stats.MAGIC_DEFENCE.ordinal()] = new Calculator();
+		std[Stats.MAGIC_DEFENCE.ordinal()].addFunc(FuncMDefMod.getInstance());
 		
 		return std;
 	}
@@ -1264,7 +1344,7 @@ public final class Formulas
 		{
 			damage += skill.getPower(attacker);
 		}
-
+		
 		// defence modifier depending of the attacker weapon
 		L2Weapon weapon = attacker.getActiveWeaponItem();
 		Stats stat = null;
@@ -1466,11 +1546,11 @@ public final class Formulas
 					sm.addString(target.getName());
 					sm.addSkillName(skill);
 					attacker.sendPacket(sm);
-
+					
 					damage = 1;
 				}
 			}
-
+			
 			if (target instanceof L2PcInstance)
 			{
 				if (skill.getSkillType() == SkillType.DRAIN)
@@ -1491,7 +1571,7 @@ public final class Formulas
 		{
 			damage *= 4;
 		}
-
+		
 		// Damage bonus in pvp
 		if ((attacker instanceof L2PlayableInstance) && (target instanceof L2PlayableInstance))
 		{
@@ -1503,7 +1583,7 @@ public final class Formulas
 		
 		return damage;
 	}
-
+	
 	public final double calcMagicDam(L2CubicInstance attacker, L2Character target, L2Skill skill, boolean mcrit)
 	{
 		final L2PcInstance owner = attacker.getOwner();
@@ -1534,10 +1614,10 @@ public final class Formulas
 				sm.addString(target.getName());
 				sm.addSkillName(skill);
 				owner.sendPacket(sm);
-
+				
 				damage = 1;
 			}
-
+			
 			if (target instanceof L2PcInstance)
 			{
 				if (skill.getSkillType() == SkillType.DRAIN)
@@ -1558,7 +1638,7 @@ public final class Formulas
 		{
 			damage *= 4;
 		}
-
+		
 		return damage;
 	}
 	
@@ -1566,7 +1646,7 @@ public final class Formulas
 	{
 		return activeChar.calcStat(Stats.BLOW_RATE, chance * (1.0 + ((activeChar.getDEX() - 20) / 100)), target, null) > Rnd.get(100);
 	}
-
+	
 	/**
 	 * Returns true in case of critical hit
 	 * @param rate
@@ -1576,12 +1656,12 @@ public final class Formulas
 	{
 		return rate > Rnd.get(1000);
 	}
-
+	
 	public final boolean calcMCrit(double mRate)
 	{
 		return mRate > Rnd.get(1000);
 	}
-
+	
 	/**
 	 * Returns true in case when ATTACK is canceled due to hit.
 	 * @param target
@@ -1594,9 +1674,9 @@ public final class Formulas
 		{
 			return false; // No attack break
 		}
-
+		
 		double init = 0;
-
+		
 		if (Config.ALT_GAME_CANCEL_CAST && target.isCastingNow())
 		{
 			init = 15;
@@ -1609,21 +1689,21 @@ public final class Formulas
 				init = 15;
 			}
 		}
-
+		
 		if (init <= 0)
 		{
 			return false; // No attack break
 		}
-
+		
 		// Chance of break is higher with higher dmg
 		init += Math.sqrt(13 * dmg);
-
+		
 		// Chance is affected by target MEN
 		init -= ((BaseStats.MEN.calcBonus(target) * 100) - 100);
-
+		
 		// Calculate all modifiers for ATTACK_CANCEL
 		double rate = target.calcStat(Stats.ATTACK_CANCEL, init, null, null);
-
+		
 		// Adjust the rate to be between 1 and 99
 		if (rate > 99)
 		{
@@ -1633,10 +1713,10 @@ public final class Formulas
 		{
 			rate = 1;
 		}
-
+		
 		return Rnd.get(100) < rate;
 	}
-
+	
 	/**
 	 * Calculate delay (in milliseconds) before next ATTACK
 	 * @param attacker
@@ -1653,7 +1733,7 @@ public final class Formulas
 		}
 		return (int) (470000 / rate);
 	}
-
+	
 	/**
 	 * Calculate delay (in milliseconds) for skills cast
 	 * @param attacker
@@ -1670,7 +1750,7 @@ public final class Formulas
 		}
 		return (int) ((skillTime * 333) / attacker.getPAtkSpd());
 	}
-
+	
 	/**
 	 * Calculate delay (in milliseconds) for skills cast
 	 * @param attacker
@@ -1686,7 +1766,7 @@ public final class Formulas
 		}
 		return (int) ((skillTime * 333) / attacker.getPAtkSpd());
 	}
-
+	
 	/**
 	 * Formula based on http://l2p.l2wh.com/nonskillattacks.html
 	 * @param attacker
@@ -1702,7 +1782,7 @@ public final class Formulas
 		
 		chance = Math.max(chance, 200);
 		chance = Math.min(chance, 980);
-
+		
 		return chance < Rnd.get(1000);
 	}
 	
@@ -1725,7 +1805,7 @@ public final class Formulas
 		{
 			return false;
 		}
-
+		
 		// if attacker use bow and target wear shield, shield block rate is multiplied by 1.3 (30%)
 		if ((at_weapon != null) && (at_weapon.getItemType() == L2WeaponType.BOW))
 		{
@@ -1733,11 +1813,11 @@ public final class Formulas
 		}
 		return shldRate > Rnd.get(100);
 	}
-
+	
 	public double calcSkillVulnerability(L2Character target, L2Skill skill)
 	{
 		double multiplier = 1; // initialize...
-
+		
 		// Get the skill type to calculate its effect in function of base stats
 		// of the L2Character target
 		if (skill != null)
@@ -1774,16 +1854,16 @@ public final class Formulas
 						break;
 				}
 			}
-
+			
 			// Finally, calculate skilltype vulnerabilities
 			SkillType type = skill.getSkillType();
-
+			
 			// Used mostly for additional effects on PDAM skills (like STUN, SHOCK...)
 			if (skill.getEffectType() != null)
 			{
 				type = skill.getEffectType();
 			}
-
+			
 			if (type != null)
 			{
 				switch (type)
@@ -1829,11 +1909,11 @@ public final class Formulas
 		}
 		return multiplier;
 	}
-
+	
 	public double calcElementalVulnerability(L2Character target, L2Skill skill)
 	{
 		double multiplier = 1; // initialize...
-
+		
 		// Get the skill type to calculate its effect in function of base stats
 		// of the L2Character target
 		if (skill != null)
@@ -2058,9 +2138,7 @@ public final class Formulas
 		
 		if (Config.DEVELOPER)
 		{
-			_log.info(skill.getName() + ": " + value + ", " + statmodifier + ", " + resmodifier + ", " 
-				+ ((int) (Math.pow((double) attacker.getMAtk(target, skill) / target.getMDef(attacker, skill), 0.2) * 100) - 100) 
-				+ ", " + ssmodifier + " ==> " + rate);
+			_log.info(skill.getName() + ": " + value + ", " + statmodifier + ", " + resmodifier + ", " + ((int) (Math.pow((double) attacker.getMAtk(target, skill) / target.getMDef(attacker, skill), 0.2) * 100) - 100) + ", " + ssmodifier + " ==> " + rate);
 		}
 		
 		return (Rnd.get(100) < rate);
@@ -2089,7 +2167,7 @@ public final class Formulas
 		{
 			lvlDepend = ((type == SkillType.PARALYZE) || (type == SkillType.FEAR)) ? 1 : 2;
 		}
-
+		
 		double statmodifier = calcSkillStatModifier(type, skill.getSaveVs(), target);
 		double resmodifier = calcSkillVulnerability(target, skill);
 		
@@ -2144,7 +2222,7 @@ public final class Formulas
 			{
 				deltamod = 1 + ((delta + 3) / 75);
 			}
-				
+			
 			if (deltamod < 0)
 			{
 				deltamod *= -1;
@@ -2152,7 +2230,7 @@ public final class Formulas
 			
 			rate *= deltamod;
 		}
-
+		
 		if (rate > 99)
 		{
 			rate = 99;
@@ -2164,8 +2242,7 @@ public final class Formulas
 		
 		if (Config.DEVELOPER)
 		{
-			_log.info(skill.getName() + ": " + value + ", " + statmodifier + ", " + resmodifier + ", "
-				+ ((int) (Math.pow((double) attacker.getMAtk() / target.getMDef(attacker.getOwner(), skill), 0.2) * 100) - 100) + " ==> " + rate);
+			_log.info(skill.getName() + ": " + value + ", " + statmodifier + ", " + resmodifier + ", " + ((int) (Math.pow((double) attacker.getMAtk() / target.getMDef(attacker.getOwner(), skill), 0.2) * 100) - 100) + " ==> " + rate);
 		}
 		return (Rnd.get(100) < rate);
 	}
@@ -2276,7 +2353,7 @@ public final class Formulas
 		if (magiclvl > 0)
 		{
 			int delta = ((magiclvl + activeChar.getLevel()) / 2) - 1 - target.getLevel();
-
+			
 			// delta [-3,infinite)
 			if (delta >= -3)
 			{

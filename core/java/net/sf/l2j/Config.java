@@ -294,6 +294,11 @@ public final class Config
 	/** Festival Chest Spawn */
 	public static long ALT_FESTIVAL_CHEST_SPAWN;
 	
+	public static double ALT_SIEGE_DAWN_GATES_PDEF_MULT;
+	public static double ALT_SIEGE_DUSK_GATES_PDEF_MULT;
+	public static double ALT_SIEGE_DAWN_GATES_MDEF_MULT;
+	public static double ALT_SIEGE_DUSK_GATES_MDEF_MULT;
+	
 	/** Number of members needed to request a clan war */
 	public static int ALT_CLAN_MEMBERS_FOR_WAR;
 	
@@ -740,7 +745,7 @@ public final class Config
 	public static boolean ENABLE_MODIFY_SKILL_DURATION;
 	/** Skill duration list */
 	public static Map<Integer, Integer> SKILL_DURATION_LIST;
-
+	
 	/** Pet renting system */
 	public static boolean ALLOW_PET_RENT;
 	/** List of NPCs that rent pets (seperated by ",") */
@@ -812,7 +817,7 @@ public final class Config
 	
 	/** Allow password change using .changepassword voiced command */
 	public static boolean PASSWORD_CHANGE_ENABLE;
-
+	
 	/** Enable custom data tables ? */
 	public static boolean CUSTOM_SPAWNLIST_TABLE;
 	public static boolean SAVE_GMSPAWN_ON_CUSTOM;
@@ -1032,9 +1037,10 @@ public final class Config
 	public static int MAX_MATK_SPEED;
 	
 	/**
-     * This is the first UNREACHABLE level.<BR>
-     * example: If you want a max at 78 & 100%, you have to set it to 79.<BR><BR>
-     */
+	 * This is the first UNREACHABLE level.<BR>
+	 * example: If you want a max at 78 & 100%, you have to set it to 79.<BR>
+	 * <BR>
+	 */
 	public static byte MAX_PLAYER_LEVEL;
 	
 	/** Deep Blue Mobs' Drop Rules Enabled */
@@ -1314,7 +1320,7 @@ public final class Config
 			
 			GAMESERVER_HOSTNAME = serverSettings.getProperty("GameserverHostname");
 			PORT_GAME = Integer.parseInt(serverSettings.getProperty("GameserverPort", "7777"));
-
+			
 			INTERNAL_HOSTNAME = serverSettings.getProperty("InternalHostname", "*");
 			EXTERNAL_HOSTNAME = serverSettings.getProperty("ExternalHostname", "*");
 			
@@ -1896,7 +1902,7 @@ public final class Config
 			ALT_OLY_WPERIOD = Long.parseLong(olympiadSettings.getProperty("AltOlyWPeriod", "604800000"));
 			ALT_OLY_VPERIOD = Long.parseLong(olympiadSettings.getProperty("AltOlyVPeriod", "86400000"));
 			ALT_OLY_CLASSED = Integer.parseInt(olympiadSettings.getProperty("AltOlyClassedParticipants", "5"));
-			ALT_OLY_REG_DISPLAY = Integer.parseInt(olympiadSettings.getProperty("AltOlyRegistrationDisplayNumber","10"));
+			ALT_OLY_REG_DISPLAY = Integer.parseInt(olympiadSettings.getProperty("AltOlyRegistrationDisplayNumber", "10"));
 			ALT_OLY_NONCLASSED = Integer.parseInt(olympiadSettings.getProperty("AltOlyNonClassedParticipants", "9"));
 			ALT_OLY_BATTLE_REWARD_ITEM = Integer.parseInt(olympiadSettings.getProperty("AltOlyBattleRewItem", "6651"));
 			ALT_OLY_CLASSED_RITEM_C = Integer.parseInt(olympiadSettings.getProperty("AltOlyClassedRewItemCount", "50"));
@@ -1929,7 +1935,7 @@ public final class Config
 			ANTIBUFF_SHIELD_ENABLE = Boolean.valueOf(customSettings.getProperty("AntibuffShieldEnable", "false"));
 			SKILL_REUSE_INDEPENDENT = Boolean.valueOf(customSettings.getProperty("SkillReuseIndependent", "false"));
 			PASSWORD_CHANGE_ENABLE = Boolean.valueOf(customSettings.getProperty("PasswordChangeEnable", "false"));
-
+			
 			CUSTOM_SPAWNLIST_TABLE = Boolean.valueOf(customSettings.getProperty("CustomSpawnlistTable", "false"));
 			SAVE_GMSPAWN_ON_CUSTOM = Boolean.valueOf(customSettings.getProperty("SaveGmSpawnOnCustom", "false"));
 			CUSTOM_NPC_TABLE = Boolean.valueOf(customSettings.getProperty("CustomNpcTable", "false"));
@@ -1976,7 +1982,7 @@ public final class Config
 			MAX_CLIENTS_PER_IP = Integer.parseInt(customSettings.getProperty("MaximumClientsPerIP", "0"));
 			ENABLE_REAL_TIME = Boolean.parseBoolean(customSettings.getProperty("EnableRealTime", "False"));
 			SEVEN_SIGNS_DUNGEON_NPC_ACCESS = Boolean.parseBoolean(customSettings.getProperty("SevenSignsDungeonNPCAccess", "False"));
-
+			
 			AIO_BUFFER_ENABLED = Boolean.valueOf(customSettings.getProperty("AIOBufferEnabled", "False"));
 			NPC_BUFFER_ENABLED = Boolean.valueOf(customSettings.getProperty("NPCBufferEnabled", "False"));
 			SCHEMES_MAX_AMOUNT = Integer.parseInt(customSettings.getProperty("MaxSchemeAmount", "4"));
@@ -1987,7 +1993,6 @@ public final class Config
 			BUFFER_BASE_MP_MAX = Float.valueOf(customSettings.getProperty("BufferBaseMpMax", "0"));
 			
 			ENABLE_MODIFY_SKILL_DURATION = Boolean.parseBoolean(customSettings.getProperty("EnableModifySkillDuration", "False"));
-			
 			
 			// Create Map only if enabled
 			if (ENABLE_MODIFY_SKILL_DURATION)
@@ -2022,7 +2027,7 @@ public final class Config
 					}
 				}
 			}
-
+			
 			ALLOW_PET_RENT = Boolean.valueOf(customSettings.getProperty("AllowPetRent", "false"));
 			PET_RENT_NPC = customSettings.getProperty("ListPetRentNpc", "");
 			
@@ -2157,8 +2162,12 @@ public final class Config
 			ALT_FESTIVAL_SECOND_SPAWN = Long.parseLong(Feature.getProperty("AltFestivalSecondSpawn", "540000"));
 			ALT_FESTIVAL_SECOND_SWARM = Long.parseLong(Feature.getProperty("AltFestivalSecondSwarm", "720000"));
 			ALT_FESTIVAL_CHEST_SPAWN = Long.parseLong(Feature.getProperty("AltFestivalChestSpawn", "900000"));
+			ALT_SIEGE_DAWN_GATES_PDEF_MULT = Double.parseDouble(Feature.getProperty("AltDawnGatesPdefMult", "1.1"));
+			ALT_SIEGE_DUSK_GATES_PDEF_MULT = Double.parseDouble(Feature.getProperty("AltDuskGatesPdefMult", "0.8"));
+			ALT_SIEGE_DAWN_GATES_MDEF_MULT = Double.parseDouble(Feature.getProperty("AltDawnGatesMdefMult", "1.1"));
+			ALT_SIEGE_DUSK_GATES_MDEF_MULT = Double.parseDouble(Feature.getProperty("AltDuskGatesMdefMult", "0.8"));
 			
-			// Pvp config
+			// PvP config
 			Properties pvpSettings = new Properties();
 			try (InputStream is = new FileInputStream(new File(PVP_FILE)))
 			{
@@ -2235,7 +2244,7 @@ public final class Config
 				e.printStackTrace();
 				throw new Error("Failed to Load " + GEODATA_FILE + " File.");
 			}
-
+			
 			PATHFINDING = Integer.parseInt(geoDataSettings.getProperty("PathFinding", "0"));
 			
 			try
@@ -2404,8 +2413,7 @@ public final class Config
 	
 	/**
 	 * Save hexadecimal ID of the server in the properties file.
-	 * 
-	 * @param serverId 
+	 * @param serverId
 	 * @param string (String) : hexadecimal ID of the server to store
 	 * @see net.sf.l2j.Config#HEXID_FILE
 	 * @see net.sf.l2j.Config#saveHexid(int serverId, String string, String fileName)
@@ -2417,8 +2425,7 @@ public final class Config
 	
 	/**
 	 * Save hexadecimal ID of the server in the properties file.
-	 * 
-	 * @param serverId 
+	 * @param serverId
 	 * @param string (String) : hexadecimal ID of the server to store
 	 * @param fileName (String) : name of the properties file
 	 */
@@ -2447,7 +2454,6 @@ public final class Config
 	
 	/**
 	 * Loads flood protector configurations.
-	 * 
 	 * @param properties
 	 */
 	private static void loadFloodProtectorConfigs(final Properties properties)

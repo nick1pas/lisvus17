@@ -138,8 +138,9 @@ public abstract class L2Character extends L2Object
 	
 	public static final int ZONE_TYPE_LENGTH = 15;
 	
-	/** Table of calculators containing all standard NPC calculator (ex : ACCURACY_COMBAT, EVASION_RATE */
-	private static final Calculator[] NPC_STD_CALCULATOR = Formulas.getInstance().getStdNPCCalculators();
+	/** Tables of calculators containing all standard NPC and door calculators */
+	private static final Calculator[] NPC_STD_CALCULATORS = Formulas.getInstance().getStdNPCCalculators();
+	private static final Calculator[] DOOR_STD_CALCULATORS = Formulas.getInstance().getStdDoorCalculators();
 	
 	private static final int MIN_GAUGE_HIT_TIME = 420;
 	
@@ -224,7 +225,7 @@ public abstract class L2Character extends L2Object
 	private List<QuestState> _notifyQuestOfDeathList = new ArrayList<>();
 	
 	/** Map(Integer, L2Skill) containing all skills of the L2Character */
-	protected Map<Integer, L2Skill> _skills;
+	private Map<Integer, L2Skill> _skills;
 	
 	private final byte[] _zones = new byte[ZONE_TYPE_LENGTH];
 	
@@ -246,10 +247,10 @@ public abstract class L2Character extends L2Object
 	 * <li>Set the _template of the L2Character</li>
 	 * <li>Set _overloaded to false (the character can take more items)</li><BR>
 	 * <BR>
-	 * <li>If L2Character is a L2NPCInstance, copy skills from template to object</li>
-	 * <li>If L2Character is a L2NPCInstance, link _calculators to NPC_STD_CALCULATOR</li><BR>
+	 * <li>If L2Character is a L2NpcInstance, copy skills from template to object</li>
+	 * <li>If L2Character is a L2NpcInstance or L2DoorInstance, link _calculators to standard calculators</li><BR>
 	 * <BR>
-	 * <li>If L2Character is NOT a L2NPCInstance, create an empty _skills slot</li>
+	 * <li>If L2Character is NOT a L2NpcInstance, create an empty _skills slot</li>
 	 * <li>If L2Character is a L2PcInstance or L2Summon, copy basic Calculator set to object</li><BR>
 	 * <BR>
 	 * @param objectId Identifier of the object to initialized
@@ -268,7 +269,7 @@ public abstract class L2Character extends L2Object
 			if (this instanceof L2NpcInstance)
 			{
 				// Copy the Standard Calculators of the L2NPCInstance in _calculators
-				_calculators = NPC_STD_CALCULATOR;
+				_calculators = NPC_STD_CALCULATORS;
 				
 				// Copy the skills of the L2NPCInstance from its template to the L2Character Instance
 				// The skills list can be affected by spell effects so it's necessary to make a copy
@@ -281,6 +282,11 @@ public abstract class L2Character extends L2Object
 						addStatFuncs(skill.getStatFuncs(null, this));
 					}
 				}
+			}
+			else if (this instanceof L2DoorInstance)
+			{
+				_calculators = DOOR_STD_CALCULATORS;
+				_skills = null;
 			}
 			else
 			{
@@ -298,15 +304,13 @@ public abstract class L2Character extends L2Object
 						}
 					}
 				}
+				else
+				{
+					_skills = new ConcurrentHashMap<>();
+				}
 				
 				Formulas.getInstance().addFuncsToNewCharacter(this);
 			}
-		}
-		
-		if (_skills == null)
-		{
-			// Initialize the Map _skills to null
-			_skills = new ConcurrentHashMap<>();
 		}
 		
 		if (!(this instanceof L2PcInstance) && !(this instanceof L2MonsterInstance) && !(this instanceof L2GuardInstance) && !(this instanceof L2SiegeGuardInstance) && !(this instanceof L2ControlTowerInstance) && !(this instanceof L2SummonInstance) && !(this instanceof L2DoorInstance) && !(this instanceof L2SiegeFlagInstance) && !(this instanceof L2PetInstance) && !(this instanceof L2FriendlyMobInstance))
@@ -566,7 +570,7 @@ public abstract class L2Character extends L2Object
 		{
 			doRevive();
 		}
-
+		
 		// Stop movement
 		stopMove(null);
 		abortAttack();
@@ -612,7 +616,7 @@ public abstract class L2Character extends L2Object
 			reg.revalidateZones(this);
 		}
 	}
-
+	
 	public void teleToLocation(Location loc, boolean allowRandomOffset, boolean isTriggeredBySkill)
 	{
 		teleToLocation(loc.getX(), loc.getY(), loc.getZ(), allowRandomOffset, isTriggeredBySkill);
@@ -627,7 +631,7 @@ public abstract class L2Character extends L2Object
 	{
 		teleToLocation(MapRegionTable.getInstance().getTeleToLocation(this, teleportWhere), true, isTriggeredBySkill);
 	}
-
+	
 	public void teleToLocation(TeleportWhereType teleportWhere)
 	{
 		teleToLocation(teleportWhere, false);
@@ -3426,13 +3430,13 @@ public abstract class L2Character extends L2Object
 	 * <B><U> Concept</U> :</B><BR>
 	 * <BR>
 	 * A L2Character owns a table of Calculators called <B>_calculators</B>. Each Calculator (a calculator per state) own a table of Func object. A Func object is a mathematic function that permit to calculate the modifier of a state (ex : REGENERATE_HP_RATE...). To reduce cache memory use,
-	 * L2NPCInstances who don't have skills share the same Calculator set called <B>NPC_STD_CALCULATOR</B>.<BR>
+	 * npcs and doors who don't have skills share the same Calculator set called <B>NPC_STD_CALCULATORS</B> and <B>DOOR_STD_CALCULATORS</B> respectively.<BR>
 	 * <BR>
-	 * That's why, if a L2NPCInstance is under a skill/spell effect that modify one of its state, a copy of the NPC_STD_CALCULATOR must be create in its _calculators before addind new Func object.<BR>
+	 * That's why, if a L2NPCInstance is under a skill/spell effect that modify one of its state, a copy of the std calculator set must be create in its _calculators before addind new Func object.<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
-	 * <li>If _calculators is linked to NPC_STD_CALCULATOR, create a copy of NPC_STD_CALCULATOR in _calculators</li>
+	 * <li>If _calculators is linked to an std calculator set, create a copy of the std calculator set in _calculators</li>
 	 * <li>Add the Func object to _calculators</li><BR>
 	 * <BR>
 	 * @param f The Func object to add to the Calculator corresponding to the state affected
@@ -3444,17 +3448,19 @@ public abstract class L2Character extends L2Object
 			return;
 		}
 		
-		// Check if Calculator set is linked to the standard Calculator set of NPC
-		if (_calculators == NPC_STD_CALCULATOR)
+		// Check if Calculator set is linked to a standard Calculator set
+		if (_calculators == NPC_STD_CALCULATORS || _calculators == DOOR_STD_CALCULATORS)
 		{
+			Calculator[] stdCalculators = _calculators;
+
 			// Create a copy of the standard NPC Calculator set
 			_calculators = new Calculator[Stats.NUM_STATS];
 			
 			for (int i = 0; i < Stats.NUM_STATS; i++)
 			{
-				if (NPC_STD_CALCULATOR[i] != null)
+				if (stdCalculators[i] != null)
 				{
-					_calculators[i] = new Calculator(NPC_STD_CALCULATOR[i]);
+					_calculators[i] = new Calculator(stdCalculators[i]);
 				}
 			}
 		}
@@ -3506,15 +3512,15 @@ public abstract class L2Character extends L2Object
 	 * <B><U> Concept</U> :</B><BR>
 	 * <BR>
 	 * A L2Character owns a table of Calculators called <B>_calculators</B>. Each Calculator (a calculator per state) own a table of Func object. A Func object is a mathematic function that permit to calculate the modifier of a state (ex : REGENERATE_HP_RATE...). To reduce cache memory use,
-	 * L2NPCInstances who don't have skills share the same Calculator set called <B>NPC_STD_CALCULATOR</B>.<BR>
+	 * npcs and doors who don't have skills share the same Calculator set called <B>NPC_STD_CALCULATORS</B> and <B>DOOR_STD_CALCULATORS</B> respectively.<BR>
 	 * <BR>
-	 * That's why, if a L2NPCInstance is under a skill/spell effect that modify one of its state, a copy of the NPC_STD_CALCULATOR must be create in its _calculators before addind new Func object.<BR>
+	 * That's why, if a L2NPCInstance is under a skill/spell effect that modify one of its state, a copy of the std calculator set must be create in its _calculators before addind new Func object.<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
 	 * <li>Remove the Func object from _calculators</li><BR>
 	 * <BR>
-	 * <li>If L2Character is a L2NPCInstance and _calculators is equal to NPC_STD_CALCULATOR, free cache memory and just create a link on NPC_STD_CALCULATOR in _calculators</li><BR>
+	 * <li>If L2Character is a npc or door and _calculators is equal to a std calculator set, free cache memory and just create a link on the std calculator set in _calculators</li><BR>
 	 * <BR>
 	 * @param f The Func object to remove from the Calculator corresponding to the state affected
 	 */
@@ -3540,24 +3546,8 @@ public abstract class L2Character extends L2Object
 		{
 			_calculators[stat] = null;
 		}
-		
-		// If possible, free the memory and just create a link on NPC_STD_CALCULATOR
-		if (this instanceof L2NpcInstance)
-		{
-			int i = 0;
-			for (; i < Stats.NUM_STATS; i++)
-			{
-				if (!Calculator.equalsCals(_calculators[i], NPC_STD_CALCULATOR[i]))
-				{
-					break;
-				}
-			}
-			
-			if (i >= Stats.NUM_STATS)
-			{
-				_calculators = NPC_STD_CALCULATOR;
-			}
-		}
+
+		resetCalculatorsIfNeeded();
 	}
 	
 	/**
@@ -3593,15 +3583,15 @@ public abstract class L2Character extends L2Object
 	 * <B><U> Concept</U> :</B><BR>
 	 * <BR>
 	 * A L2Character owns a table of Calculators called <B>_calculators</B>. Each Calculator (a calculator per state) own a table of Func object. A Func object is a mathematic function that permit to calculate the modifier of a state (ex : REGENERATE_HP_RATE...). To reduce cache memory use,
-	 * L2NPCInstances who don't have skills share the same Calculator set called <B>NPC_STD_CALCULATOR</B>.<BR>
+	 * npcs and doors who don't have skills share the same Calculator set called <B>NPC_STD_CALCULATORS</B> and <B>DOOR_STD_CALCULATORS</B> respectively.<BR>
 	 * <BR>
-	 * That's why, if a L2NPCInstance is under a skill/spell effect that modify one of its state, a copy of the NPC_STD_CALCULATOR must be create in its _calculators before addind new Func object.<BR>
+	 * That's why, if an npc or door is under a skill/spell effect that modify one of its state, a copy of the std calculator set must be create in its _calculators before addind new Func object.<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
 	 * <li>Remove all Func objects of the selected owner from _calculators</li><BR>
 	 * <BR>
-	 * <li>If L2Character is a L2NPCInstance and _calculators is equal to NPC_STD_CALCULATOR, free cache memory and just create a link on NPC_STD_CALCULATOR in _calculators</li><BR>
+	 * <li>If L2Character is an npc or door and _calculators is equal to a std calculator set, free cache memory and just create a link on the std calculator set in _calculators</li><BR>
 	 * <BR>
 	 * <B><U> Example of use </U> :</B><BR>
 	 * <BR>
@@ -3634,24 +3624,8 @@ public abstract class L2Character extends L2Object
 				}
 			}
 		}
-		
-		// If possible, free the memory and just create a link on NPC_STD_CALCULATOR
-		if (this instanceof L2NpcInstance)
-		{
-			int i = 0;
-			for (; i < Stats.NUM_STATS; i++)
-			{
-				if (!Calculator.equalsCals(_calculators[i], NPC_STD_CALCULATOR[i]))
-				{
-					break;
-				}
-			}
-			
-			if (i >= Stats.NUM_STATS)
-			{
-				_calculators = NPC_STD_CALCULATOR;
-			}
-		}
+
+		resetCalculatorsIfNeeded();
 		
 		if (owner instanceof L2Effect)
 		{
@@ -3755,6 +3729,41 @@ public abstract class L2Character extends L2Object
 		else if (su != null)
 		{
 			broadcastPacket(su);
+		}
+	}
+
+	private void resetCalculatorsIfNeeded()
+	{
+		Calculator[] stdCalculators;
+		if (this instanceof L2NpcInstance)
+		{
+			stdCalculators = NPC_STD_CALCULATORS;
+		}
+		else if (this instanceof L2DoorInstance)
+		{
+			stdCalculators = DOOR_STD_CALCULATORS;
+		}
+		else
+		{
+			stdCalculators = null;
+		}
+		
+		// If possible, free the memory and just create a link on standard calculators
+		if (stdCalculators != null)
+		{
+			int i;
+			for (i = 0; i < Stats.NUM_STATS; i++)
+			{
+				if (!Calculator.isEqualPair(_calculators[i], stdCalculators[i]))
+				{
+					break;
+				}
+			}
+			
+			if (i >= Stats.NUM_STATS)
+			{
+				_calculators = stdCalculators;
+			}
 		}
 	}
 	
@@ -5397,6 +5406,11 @@ public abstract class L2Character extends L2Object
 	public L2Skill addSkill(L2Skill newSkill)
 	{
 		L2Skill oldSkill = null;
+
+		if (_skills == null)
+		{
+			return oldSkill;
+		}
 		
 		if (newSkill != null)
 		{
@@ -5437,7 +5451,7 @@ public abstract class L2Character extends L2Object
 	 */
 	public L2Skill removeSkill(L2Skill skill)
 	{
-		if (skill == null)
+		if (skill == null || _skills == null)
 		{
 			return null;
 		}
