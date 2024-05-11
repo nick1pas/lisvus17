@@ -15,8 +15,7 @@ services:
     networks:
       - "l2_net"
     volumes:
-      - "/var/volumes-data/lineage2/login/log:/opt/login/log"
-      - "./login/config:/opt/login/config"
+      - "./login:/opt/login"
     depends_on:
       - "l2mariadb"
 
@@ -32,8 +31,7 @@ services:
     networks:
       - "l2_net"
     volumes:
-      - "/var/volumes-data/lineage2/gameserver/log:/opt/gameserver/log"
-      - "./gameserver/config:/opt/gameserver/config"
+      - "./gameserver:/opt/gameserver"
     depends_on:
       - "l2mariadb"
 
@@ -46,7 +44,7 @@ services:
     networks:
       - "l2_net"
     volumes:
-      - "/var/volumes-data/lineage2/db:/var/lib/mysql"
+      - "./db:/var/lib/mysql"
 
   l2adminer:
     image: "adminer"
