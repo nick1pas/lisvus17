@@ -59,7 +59,7 @@ public class L2AdventurerInstance extends L2FolkInstance
                 _log.warning("Invalid Bypass to Server command parameter.");
             }
         }
-        else if (command.startsWith("raidInfo"))
+        else if (command.startsWith("raidinfo"))
         {
             int bossLevel = Integer.parseInt(command.substring(9).trim());
             String filename = "data/html/adventurer_guildsman/raid_info/info.htm";

@@ -212,12 +212,12 @@ public class L2FolkInstance extends L2NpcInstance
     @Override
 	public void onBypassFeedback(L2PcInstance player, String command)
     {
-        if (command.startsWith("SkillList"))
+        if (command.startsWith("skilllist"))
         {
             player.setSkillLearningClassId(player.getClassId());
             showSkillList(player, player.getClassId());
         }
-        else if (command.startsWith("EnchantSkillList"))
+        else if (command.startsWith("enchantskilllist"))
         {
             showEnchantSkillList(player, player.getClassId());
         }

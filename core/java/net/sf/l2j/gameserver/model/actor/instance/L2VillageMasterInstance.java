@@ -98,7 +98,7 @@ public final class L2VillageMasterInstance extends L2FolkInstance
         {
             levelUpClan(player, player.getClanId());
         }
-        else if (command.startsWith("Subclass"))
+        else if (command.startsWith("subclass"))
         {
             int cmdChoice = Integer.parseInt(command.substring(9, 10).trim());
 

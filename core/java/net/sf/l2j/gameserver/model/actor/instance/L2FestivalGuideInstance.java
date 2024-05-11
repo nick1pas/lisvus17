@@ -137,13 +137,12 @@ public final class L2FestivalGuideInstance extends L2FolkInstance
     @Override
     public void onBypassFeedback(L2PcInstance player, String command)
     {
-        if (command.startsWith("FestivalDesc"))
+        if (command.startsWith("festivaldesc"))
         {
             int val = Integer.parseInt(command.substring(13));
-            
             showChatWindow(player, val, null, true);
         }
-        else if (command.startsWith("Festival"))
+        else if (command.startsWith("festival"))
         {
             L2Party playerParty = player.getParty();
             int val = Integer.parseInt(command.substring(9, 10));

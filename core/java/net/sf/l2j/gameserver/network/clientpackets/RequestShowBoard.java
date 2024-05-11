@@ -37,7 +37,7 @@ public class RequestShowBoard extends L2GameClientPacket
 	@Override
 	public void runImpl()
 	{
-		CommunityBoard.getInstance().handleCommands(getClient(), Config.BBS_DEFAULT);
+		CommunityBoard.getInstance().handleCommands(getClient(), Config.BBS_DEFAULT.toLowerCase());
 	}
 	
 	/*

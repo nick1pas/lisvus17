@@ -50,13 +50,13 @@ public class L2OlympiadManagerInstance extends L2FolkInstance
     @Override
 	public void onBypassFeedback (L2PcInstance player, String command)
     {  
-        if (command.startsWith("OlympiadDesc"))
+        if (command.startsWith("olympiaddesc"))
         {
             int val = Integer.parseInt(command.substring(13,14));
             String suffix = command.substring(14);
             showChatWindow(player, val, suffix);
         }
-        else if (command.startsWith("OlympiadNoble"))
+        else if (command.startsWith("olympiadnoble"))
         {
             if (!player.isNoble() || player.getClassId().level() < 3)
                 return;
@@ -152,7 +152,7 @@ public class L2OlympiadManagerInstance extends L2FolkInstance
                     break;
             }
         }
-        else if (command.startsWith("Olympiad"))
+        else if (command.startsWith("olympiad"))
         { 
             int val = Integer.parseInt(command.substring(9, 10));
             NpcHtmlMessage reply = new NpcHtmlMessage(getObjectId());
