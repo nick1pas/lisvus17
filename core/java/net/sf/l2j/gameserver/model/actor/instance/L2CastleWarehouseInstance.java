@@ -134,23 +134,23 @@ public class L2CastleWarehouseInstance extends L2FolkInstance
 			return;
 		}
 		
-		if (command.startsWith("WithdrawP"))
+		if (command.startsWith("withdrawp"))
 		{
 			showRetrieveWindow(player);
 		}
-		else if (command.equals("DepositP"))
+		else if (command.equals("depositp"))
 		{
 			showDepositWindow(player);
 		}
-		else if (command.equals("WithdrawC"))
+		else if (command.equals("withdrawc"))
 		{
 			showWithdrawWindowClan(player);
 		}
-		else if (command.equals("DepositC"))
+		else if (command.equals("depositc"))
 		{
 			showDepositWindowClan(player);
 		}
-		else if (command.startsWith("Chat"))
+		else if (command.startsWith("chat"))
 		{
 			int val = 0;
 			try

@@ -51,7 +51,7 @@ public class L2CastleBlacksmithInstance extends L2FolkInstance
 
         else if (condition == COND_CASTLE_OWNER)
         {
-            if (command.startsWith("Chat"))
+            if (command.startsWith("chat"))
             {
                 int val = 0;
                 try

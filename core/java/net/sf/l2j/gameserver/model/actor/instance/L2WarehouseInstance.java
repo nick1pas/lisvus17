@@ -218,30 +218,30 @@ public final class L2WarehouseInstance extends L2FolkInstance
 			return;
 		}
 		
-		if (command.startsWith("WithdrawP"))
+		if (command.startsWith("withdrawp"))
 		{
 			showRetrieveWindow(player);
 		}
-		else if (command.equals("DepositP"))
+		else if (command.equals("depositp"))
 		{
 			showDepositWindow(player);
 		}
-		else if (command.equals("WithdrawC"))
+		else if (command.equals("withdrawc"))
 		{
 			showWithdrawWindowClan(player);
 		}
-		else if (command.equals("DepositC"))
+		else if (command.equals("depositc"))
 		{
 			showDepositWindowClan(player);
 		}
-		else if (command.startsWith("WithdrawF"))
+		else if (command.startsWith("withdrawf"))
 		{
 			if (Config.ALLOW_FREIGHT)
 			{
 				showWithdrawWindowFreight(player);
 			}
 		}
-		else if (command.startsWith("DepositF"))
+		else if (command.startsWith("depositf"))
 		{
 			if (Config.ALLOW_FREIGHT)
 			{

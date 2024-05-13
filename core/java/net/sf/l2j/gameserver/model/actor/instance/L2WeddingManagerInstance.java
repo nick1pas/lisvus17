@@ -110,7 +110,7 @@ public class L2WeddingManagerInstance extends L2FolkInstance
 			sendHtmlMessage(player, filename, null);
 			return;
 		}
-		else if (command.startsWith("AcceptWedding"))
+		else if (command.startsWith("acceptwedding"))
 		{
 			// Accept the wedding request
 			player.setMarryAccepted(true);
@@ -148,7 +148,7 @@ public class L2WeddingManagerInstance extends L2FolkInstance
 			sendHtmlMessage(pTarget, filename, pTarget.getName());
 			return;
 		}
-		else if (command.startsWith("DeclineWedding"))
+		else if (command.startsWith("declinewedding"))
 		{
 			player.setMarryRequest(false);
 			pTarget.setMarryRequest(false);
@@ -195,7 +195,7 @@ public class L2WeddingManagerInstance extends L2FolkInstance
 			sendHtmlMessage(player, filename, pTarget.getName());
 			return;
 		}
-		else if (command.startsWith("AskWedding"))
+		else if (command.startsWith("askwedding"))
 		{
 			// Check for formal wear
 			if (Config.WEDDING_FORMAL_WEAR)

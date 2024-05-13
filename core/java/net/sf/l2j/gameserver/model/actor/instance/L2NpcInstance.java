@@ -1038,7 +1038,7 @@ public class L2NpcInstance extends L2Character
 			
 			player.sendPacket(html);
 		}
-		else if (command.startsWith("Quest"))
+		else if (command.startsWith("quest"))
 		{
 			String quest = "";
 			try
@@ -1058,7 +1058,7 @@ public class L2NpcInstance extends L2Character
 				showQuestWindow(player, quest);
 			}
 		}
-		else if (command.startsWith("Chat"))
+		else if (command.startsWith("chat"))
 		{
 			int val = 0;
 			try
@@ -1074,7 +1074,7 @@ public class L2NpcInstance extends L2Character
 			
 			showChatWindow(player, val);
 		}
-		else if (command.startsWith("Link"))
+		else if (command.startsWith("link"))
 		{
 			String path = command.substring(5).trim();
 			if (path.indexOf("..") != -1)
@@ -1088,7 +1088,7 @@ public class L2NpcInstance extends L2Character
 			html.replace("%objectId%", String.valueOf(getObjectId()));
 			player.sendPacket(html);
 		}
-		else if (command.startsWith("NobleTeleport"))
+		else if (command.startsWith("nobleteleport"))
 		{
 			if (!player.isNoble())
 			{
@@ -1115,7 +1115,7 @@ public class L2NpcInstance extends L2Character
 			
 			showChatWindow(player, val);
 		}
-		else if (command.startsWith("Loto"))
+		else if (command.startsWith("loto"))
 		{
 			int val = 0;
 			try
@@ -1139,11 +1139,11 @@ public class L2NpcInstance extends L2Character
 			}
 			showLotoWindow(player, val);
 		}
-		else if (command.startsWith("CPRecovery"))
+		else if (command.startsWith("cprecovery"))
 		{
 			makeCPRecovery(player);
 		}
-		else if (command.startsWith("SupportMagic"))
+		else if (command.startsWith("supportmagic"))
 		{
 			makeSupportMagic(player);
 		}
@@ -1171,7 +1171,7 @@ public class L2NpcInstance extends L2Character
 				player.sendMessage("Wrong command parameters.");
 			}
 		}
-		else if (command.startsWith("EnterRift"))
+		else if (command.startsWith("enterrift"))
 		{
 			try
 			{
@@ -1182,7 +1182,7 @@ public class L2NpcInstance extends L2Character
 			{
 			}
 		}
-		else if (command.startsWith("ChangeRiftRoom"))
+		else if (command.startsWith("changeriftroom"))
 		{
 			if (player.isInParty() && player.getParty().isInDimensionalRift())
 			{
@@ -1193,7 +1193,7 @@ public class L2NpcInstance extends L2Character
 				DimensionalRiftManager.getInstance().handleCheat(player, this);
 			}
 		}
-		else if (command.startsWith("ExitRift"))
+		else if (command.startsWith("exitrift"))
 		{
 			if (player.isInParty() && player.getParty().isInDimensionalRift())
 			{

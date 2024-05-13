@@ -26,18 +26,18 @@ import net.sf.l2j.gameserver.network.serverpackets.ShowBoard;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
 public class CommunityBoard
-{	
+{
     public static CommunityBoard getInstance()
     {
         return SingletonHolder._instance;
     }
-
+    
     public void handleCommands(L2GameClient client, String command)
     {
         L2PcInstance activeChar = client.getActiveChar();
         if (activeChar == null)
             return;
-
+        
         switch (Config.COMMUNITY_TYPE)
         {
             default:
@@ -45,34 +45,34 @@ public class CommunityBoard
                 activeChar.sendPacket(new SystemMessage(SystemMessage.CB_OFFLINE));
                 break;
             case 1: // old
-                RegionBBSManager.getInstance().parseCmd(command,activeChar);
+                RegionBBSManager.getInstance().parseCmd(command, activeChar);
                 break;
             case 2: // new
                 if (command.startsWith("_bbsclan"))
-                    ClanBBSManager.getInstance().parseCmd(command,activeChar);
+                    ClanBBSManager.getInstance().parseCmd(command, activeChar);
                 else if (command.startsWith("_bbsmemo"))
-                    TopicBBSManager.getInstance().parseCmd(command,activeChar);
+                    TopicBBSManager.getInstance().parseCmd(command, activeChar);
                 else if (command.startsWith("_bbstopics"))
-                    TopicBBSManager.getInstance().parseCmd(command,activeChar);
+                    TopicBBSManager.getInstance().parseCmd(command, activeChar);
                 else if (command.startsWith("_bbsposts"))
-                    PostBBSManager.getInstance().parseCmd(command,activeChar);
+                    PostBBSManager.getInstance().parseCmd(command, activeChar);
                 else if (command.startsWith("_bbstop"))
-                    TopBBSManager.getInstance().parseCmd(command,activeChar);
+                    TopBBSManager.getInstance().parseCmd(command, activeChar);
                 else if (command.startsWith("_bbshome"))
-                    TopBBSManager.getInstance().parseCmd(command,activeChar);
+                    TopBBSManager.getInstance().parseCmd(command, activeChar);
                 else if (command.startsWith("_bbsloc"))
-                    RegionBBSManager.getInstance().parseCmd(command,activeChar);
+                    RegionBBSManager.getInstance().parseCmd(command, activeChar);
                 else
                 {
-                    ShowBoard sb = new ShowBoard("<html><body><br><br><center>the command: "+command+" is not implemented yet</center><br><br></body></html>","101");
+                    ShowBoard sb = new ShowBoard("<html><body><br><br><center>the command: " + command + " is not implemented yet</center><br><br></body></html>", "101");
                     activeChar.sendPacket(sb);
-                    activeChar.sendPacket(new ShowBoard(null,"102"));
-                    activeChar.sendPacket(new ShowBoard(null,"103"));
+                    activeChar.sendPacket(new ShowBoard(null, "102"));
+                    activeChar.sendPacket(new ShowBoard(null, "103"));
                 }
                 break;
         }
     }
-
+    
     /**
      * @param client
      * @param url
@@ -87,7 +87,7 @@ public class CommunityBoard
         L2PcInstance activeChar = client.getActiveChar();
         if (activeChar == null)
             return;
-
+        
         switch (Config.COMMUNITY_TYPE)
         {
             case 2:
@@ -119,7 +119,7 @@ public class CommunityBoard
     }
     
     private static class SingletonHolder
-	{
-		protected static final CommunityBoard _instance = new CommunityBoard();
-	}
+    {
+        protected static final CommunityBoard _instance = new CommunityBoard();
+    }
 }

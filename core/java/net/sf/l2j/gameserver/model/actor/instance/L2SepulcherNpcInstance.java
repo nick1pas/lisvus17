@@ -217,7 +217,7 @@ public class L2SepulcherNpcInstance extends L2NpcInstance
             html.replace("%playername%", player.getName());
             player.sendPacket(html);
         }
-        else if (command.startsWith("Chat"))
+        else if (command.startsWith("chat"))
         {
             int val = 0;
             try

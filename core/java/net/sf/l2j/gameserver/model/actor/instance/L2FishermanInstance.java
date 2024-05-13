@@ -51,7 +51,7 @@ public class L2FishermanInstance extends L2FolkInstance
 	@Override
 	public void onBypassFeedback(L2PcInstance player, String command)
 	{
-		if (command.startsWith("FishSkillList"))
+		if (command.startsWith("fishskilllist"))
 		{
 			player.setSkillLearningClassId(player.getClassId());
 			showSkillList(player);

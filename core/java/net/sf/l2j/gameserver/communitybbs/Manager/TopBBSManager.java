@@ -65,10 +65,10 @@ public class TopBBSManager extends BaseBBSManager
 		}
 		else
 		{
-		        ShowBoard sb = new ShowBoard("<html><body><br><br><center>the command: "+command+" is not implemented yet</center><br><br></body></html>","101");
-		        activeChar.sendPacket(sb);
-		        activeChar.sendPacket(new ShowBoard(null,"102"));
-		        activeChar.sendPacket(new ShowBoard(null,"103"));
+		    ShowBoard sb = new ShowBoard("<html><body><br><br><center>the command: "+command+" is not implemented yet</center><br><br></body></html>","101");
+		    activeChar.sendPacket(sb);
+		    activeChar.sendPacket(new ShowBoard(null,"102"));
+		    activeChar.sendPacket(new ShowBoard(null,"103"));
 		}
 	}
 

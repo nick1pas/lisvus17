@@ -65,7 +65,7 @@ public class L2RaceManagerInstance extends L2NpcInstance
     @Override
     public void onBypassFeedback(L2PcInstance player, String command)
     {
-        if (command.startsWith("BuyTicket"))
+        if (command.startsWith("buyticket"))
         {
             if (MonsterRace.getInstance().isAcceptingBets())
             {
@@ -82,30 +82,30 @@ public class L2RaceManagerInstance extends L2NpcInstance
             else
             {
                 player.sendPacket(new SystemMessage(SystemMessage.MONSRACE_TICKETS_NOT_AVAILABLE));
-                command = "Chat 0";
+                command = "chat 0";
             }
         }
-        else if (command.startsWith("ShowOdds"))
+        else if (command.startsWith("showodds"))
         {
             if (MonsterRace.getInstance().isAcceptingBets())
             {
                 player.sendPacket(new SystemMessage(SystemMessage.MONSRACE_NO_PAYOUT_INFO));
-                command = "Chat 0";
+                command = "chat 0";
             }
             else
             {
                 showOdds(player);
             }
         }
-        else if (command.equals("ShowInfo"))
+        else if (command.equals("showinfo"))
         {
             showMonsterInfo(player);
         }
-        else if (command.equals("calculateWin"))
+        else if (command.equals("calculatewin"))
         {
             // displayCalculateWinnings(player);
         }
-        else if (command.equals("viewHistory"))
+        else if (command.equals("viewhistory"))
         {
             // displayHistory(player);
         }

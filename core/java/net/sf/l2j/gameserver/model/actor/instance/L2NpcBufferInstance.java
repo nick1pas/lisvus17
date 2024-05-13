@@ -159,12 +159,12 @@ public class L2NpcBufferInstance extends L2FolkInstance
 
         L2Character target = player;
         L2Summon summon = player.getPet();
-        if (command.startsWith("Pet"))
+        if (command.startsWith("pet"))
         {
             if (summon == null)
             {
                 player.sendMessage("Please summon your pet.");
-                if (command.contains("Scheme"))
+                if (command.contains("scheme"))
                 {
                 	showSchemeMenu(player);
                 }
@@ -177,21 +177,21 @@ public class L2NpcBufferInstance extends L2FolkInstance
             target = summon;
         }
         
-        if (command.startsWith("Chat"))
+        if (command.startsWith("chat"))
         {
             int val = Integer.parseInt(st.nextToken());
             showChatWindow(player, val);
         }
-        else if (command.startsWith("SchemeMenu"))
+        else if (command.startsWith("schememenu"))
         {
         	showSchemeMenu(player);
         }
-        else if (command.startsWith("SchemeChat"))
+        else if (command.startsWith("schemechat"))
         {
         	int val = Integer.parseInt(st.nextToken());
         	showSchemeWindow(player, val);
         }
-        else if (command.startsWith("SchemeCreate"))
+        else if (command.startsWith("schemecreate"))
         {
         	if (!st.hasMoreTokens())
         	{
@@ -233,7 +233,7 @@ public class L2NpcBufferInstance extends L2FolkInstance
             }
             showSchemeWindow(player, 1); // Buffs window
         }
-        else if (command.startsWith("SchemeEdit"))
+        else if (command.startsWith("schemeedit"))
         {
         	if (!st.hasMoreTokens())
         	{
@@ -258,7 +258,7 @@ public class L2NpcBufferInstance extends L2FolkInstance
             }
 			showSchemeWindow(player, 1); // Buffs window
         }
-        else if (command.startsWith("SchemeDelete"))
+        else if (command.startsWith("schemedelete"))
         {
         	if (!st.hasMoreTokens())
         	{
@@ -273,7 +273,7 @@ public class L2NpcBufferInstance extends L2FolkInstance
             player.deleteScheme(schemeName);
             showSchemeMenu(player);
         }
-        else if (command.startsWith("SchemeBuffSelection"))
+        else if (command.startsWith("schemebuffselection"))
         {
         	List<String> buffs = player.getSchemes().get(player.getEditingSchemeName() + "_temp");
         	if (buffs != null)
@@ -303,7 +303,7 @@ public class L2NpcBufferInstance extends L2FolkInstance
             	showSchemeWindow(player, Integer.parseInt(st.nextToken()));
             }
         }
-        else if (command.startsWith("SchemeSave"))
+        else if (command.startsWith("schemesave"))
         {
         	String schemeName = player.getEditingSchemeName();
         	// Save scheme changes
@@ -328,7 +328,7 @@ public class L2NpcBufferInstance extends L2FolkInstance
         	player.setEditingSchemeName(null);
         	showSchemeMenu(player);
         }
-        else if (command.startsWith("SchemeCancel"))
+        else if (command.startsWith("schemecancel"))
         {
         	String schemeName = player.getEditingSchemeName();
         	// Cancel scheme changes
@@ -336,11 +336,13 @@ public class L2NpcBufferInstance extends L2FolkInstance
         	player.setEditingSchemeName(null);
         	showSchemeMenu(player);
         }
-        else if (command.startsWith("Buff") || command.startsWith("PetBuff"))
+        else if (command.startsWith("buff") || command.startsWith("petbuff"))
         {
+            final boolean isScheme = command.contains("scheme");
         	String[] buffGroup;
+
         	// Scheme support
-        	if (command.contains("Scheme"))
+        	if (isScheme)
         	{
         		if (!st.hasMoreTokens())
             	{
@@ -421,7 +423,7 @@ public class L2NpcBufferInstance extends L2FolkInstance
             }
             
             // Show HTML window
-            if (command.contains("Scheme"))
+            if (isScheme)
             {
             	showSchemeMenu(player);
             }
@@ -430,7 +432,7 @@ public class L2NpcBufferInstance extends L2FolkInstance
             	showChatWindow(player, Integer.parseInt(st.nextToken()));
             }
         }
-        else if (command.startsWith("Heal") || command.startsWith("PetHeal"))
+        else if (command.startsWith("heal") || command.startsWith("petheal"))
         {
             if (!target.isInCombat() && !AttackStanceTaskManager.getInstance().getAttackStanceTask(target))
             {
@@ -460,7 +462,7 @@ public class L2NpcBufferInstance extends L2FolkInstance
                 }
             }
         }
-        else if (command.startsWith("RemoveBuffs") || command.startsWith("PetRemoveBuffs"))
+        else if (command.startsWith("removebuffs") || command.startsWith("petremovebuffs"))
         {
         	// Remove all effects from target
             target.stopAllEffects();

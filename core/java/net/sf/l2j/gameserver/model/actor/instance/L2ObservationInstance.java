@@ -56,7 +56,7 @@ public final class L2ObservationInstance extends L2FolkInstance
 			return;
 		}
 		
-		if (command.startsWith("observeSiege"))
+		if (command.startsWith("observesiege"))
 		{
 			String val = command.substring(13);
 			StringTokenizer st = new StringTokenizer(val);
