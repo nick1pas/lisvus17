@@ -49,12 +49,12 @@ public class L2SignsPriestInstance extends L2FolkInstance
 			return;
 		}
 		
-		if (command.startsWith("sevensignsdesc"))
+		if (command.startsWith("SevenSignsDesc"))
 		{
 			int val = Integer.parseInt(command.substring(15));
 			showChatWindow(player, val, null, true);
 		}
-		else if (command.startsWith("sevensigns"))
+		else if (command.startsWith("SevenSigns"))
 		{
 			SystemMessage sm;
 			InventoryUpdate iu;

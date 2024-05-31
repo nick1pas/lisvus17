@@ -29,7 +29,7 @@ public class L2WyvernManagerInstance extends L2CastleChamberlainInstance
     @Override
 	public void onBypassFeedback(L2PcInstance player, String command)
     {
-        if (command.startsWith("ridewyvern"))
+        if (command.startsWith("RideWyvern"))
         {
             if (!player.isClanLeader())
             {

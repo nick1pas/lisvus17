@@ -67,7 +67,7 @@ public class L2DoormenInstance extends L2FolkInstance
         
         if (condition == COND_CASTLE_OWNER || condition == COND_HALL_OWNER)
         {
-            if (command.startsWith("chat"))
+            if (command.startsWith("Chat"))
             {
                 showChatWindow(player);
                 return;

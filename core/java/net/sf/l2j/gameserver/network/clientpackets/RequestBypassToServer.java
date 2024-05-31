@@ -45,13 +45,13 @@ public class RequestBypassToServer extends L2GameClientPacket
 	private static final String _C__21_REQUESTBYPASSTOSERVER = "[C] 21 RequestBypassToServer";
 	private static Logger _log = Logger.getLogger(RequestBypassToServer.class.getName());
 	
+	// S
 	private String _command;
 	
 	@Override
 	protected void readImpl()
 	{
-		// Commands should always be lower-case for better compatibility with 3rd-party clients
-		_command = readS().toLowerCase();
+		_command = readS();
 	}
 	
 	@Override
@@ -146,13 +146,9 @@ public class RequestBypassToServer extends L2GameClientPacket
 				try
 				{
 					L2Object object = L2World.getInstance().findObject(Integer.parseInt(id));
-					if (object != null && object instanceof L2NpcInstance && endOfId > 0)
+					if (object != null && object instanceof L2NpcInstance && endOfId > 0 && ((L2NpcInstance)object).canInteract(activeChar))
 					{
-						L2NpcInstance npc = (L2NpcInstance)object;
-						if (npc.canInteract(activeChar))
-						{
-							npc.onBypassFeedback(activeChar, _command.substring(endOfId + 1));
-						}
+						((L2NpcInstance) object).onBypassFeedback(activeChar, _command.substring(endOfId + 1));
 					}
 					
 					activeChar.sendPacket(new ActionFailed());
@@ -195,7 +191,7 @@ public class RequestBypassToServer extends L2GameClientPacket
 			{
 				CommunityBoard.getInstance().handleCommands(getClient(), _command);
 			}
-			else if (_command.startsWith("quest "))
+			else if (_command.startsWith("Quest "))
 			{
 				if (!activeChar.validateBypass(_command))
 				{
@@ -214,7 +210,7 @@ public class RequestBypassToServer extends L2GameClientPacket
 					player.processQuestEvent(p.substring(0, idx), p.substring(idx).trim());
 				}
 			}
-			else if (_command.startsWith("olympiadarenachange"))
+			else if (_command.startsWith("OlympiadArenaChange"))
 			{
 				Olympiad.getInstance().bypassChangeArena(_command, activeChar);
 			}

@@ -31,9 +31,9 @@ public class L2TvTManagerInstance extends L2NpcInstance
     @Override
     public void onBypassFeedback(L2PcInstance player, String command)
     {
-        if (command.equalsIgnoreCase("tvt_event_participation"))
+        if (command.equals("tvt_event_participation"))
             TvTEvent.getInstance().registerPlayer(player);
-        else if (command.equalsIgnoreCase("tvt_event_remove_participation"))
+        else if (command.equals("tvt_event_remove_participation"))
         	TvTEvent.getInstance().removePlayer(player);
     }
 

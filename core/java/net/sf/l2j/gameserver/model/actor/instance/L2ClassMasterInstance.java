@@ -59,15 +59,15 @@ public final class L2ClassMasterInstance extends L2FolkInstance
     @Override
     public void onBypassFeedback(L2PcInstance player, String command)
     {
-        if (command.startsWith("1stclass"))
+        if (command.startsWith("1stClass"))
         {
             showHtmlMenu(player, getObjectId(), 1);
         }
-        else if (command.startsWith("2ndclass"))
+        else if (command.startsWith("2ndClass"))
         {
             showHtmlMenu(player, getObjectId(), 2);
         }
-        else if (command.startsWith("3rdclass"))
+        else if (command.startsWith("3rdClass"))
         {
             showHtmlMenu(player, getObjectId(), 3);
         }

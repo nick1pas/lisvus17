@@ -31,17 +31,17 @@ public class L2SymbolMakerInstance extends L2FolkInstance
 	@Override
 	public void onBypassFeedback(L2PcInstance player, String command)
 	{
-		if (command.equalsIgnoreCase("Draw"))
+		if (command.equals("Draw"))
 		{
 			L2HennaInstance[] henna = HennaTreeTable.getInstance().getAvailableHenna(player.getClassId());
 			HennaEquipList hel = new HennaEquipList(player, henna);
 			player.sendPacket(hel);
 		}
-		else if (command.equalsIgnoreCase("RemoveList"))
+		else if (command.equals("RemoveList"))
         {
 			showRemoveChat(player);
 		}
-		else if (command.startsWith("remove "))
+		else if (command.startsWith("Remove "))
 		{
 			int slot = Integer.parseInt(command.substring(7));
 			player.removeHenna(slot);
