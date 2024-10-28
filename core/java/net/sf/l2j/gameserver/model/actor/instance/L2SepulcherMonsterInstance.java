@@ -49,7 +49,7 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance
 			case 10342:
 			case 10346:
 			case 10349:
-				setIsRaid(true);
+				setIsRaid(true, true);
 				break;
 		}
 	}

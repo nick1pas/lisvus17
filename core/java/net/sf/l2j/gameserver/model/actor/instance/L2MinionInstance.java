@@ -63,7 +63,7 @@ public final class L2MinionInstance extends L2MonsterInstance
 			if (getLeader().isRaid())
 			{
 				// Set Raid state to minions
-				setIsRaid(true);
+				setIsRaid(true, true);
 			}
 			// Notify Leader that Minion has Spawned
 			getLeader().notifyMinionSpawned(this);

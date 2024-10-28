@@ -674,7 +674,7 @@ public abstract class L2Character extends L2Object
 				return;
 			}
 			
-			if (((L2PcInstance) this).isFlying())
+			if (isFlying())
 			{
 				((L2PcInstance) this).sendMessage("You cannot attack while flying.");
 				sendPacket(new ActionFailed());
@@ -1837,9 +1837,19 @@ public abstract class L2Character extends L2Object
 	 * Set this NPC as a Raid instance.<BR>
 	 * <BR>
 	 * @param isRaid
+	 * @param isRaidCurseCaster
 	 */
-	public void setIsRaid(boolean isRaid)
+	public void setIsRaid(boolean isRaid, boolean isRaidCurseCaster)
 	{
+	}
+
+	/**
+	 * Return True if the L2Character can cast raid curse.
+	 * @return
+	 */
+	public boolean isRaidCurseCaster()
+	{
+		return false;
 	}
 	
 	public boolean isChampion()
@@ -4059,7 +4069,7 @@ public abstract class L2Character extends L2Object
 			int geoHeight = GeoData.getInstance().getSpawnHeight(xPrev, yPrev, zPrev);
 			dz = m._zDestination - geoHeight;
 			// quite a big difference, compare to validatePosition packet
-			if ((this instanceof L2PcInstance) && (Math.abs(((L2PcInstance) this).getClientZ() - geoHeight) > 200) && (Math.abs(((L2PcInstance) this).getClientZ() - geoHeight) < 1500))
+			if ((this instanceof L2PcInstance) && (Math.abs(getClientZ() - geoHeight) > 200) && (Math.abs(getClientZ() - geoHeight) < 1500))
 			{
 				dz = m._zDestination - zPrev; // allow diff
 			}
@@ -4996,7 +5006,7 @@ public abstract class L2Character extends L2Object
 			level = ((L2Summon) this).getOwner().getLevel() > getLevel() ? ((L2Summon) this).getOwner().getLevel() : getLevel();
 		}
 		
-		if (target.isRaid() && level > (target.getLevel() + RAID_LEVEL_MAX_DIFFERENCE))
+		if (target.isRaidCurseCaster() && level > (target.getLevel() + RAID_LEVEL_MAX_DIFFERENCE))
 		{
 			L2Skill skill = SkillTable.getInstance().getInfo(4515, 1);
 			if (skill != null)
@@ -6008,8 +6018,8 @@ public abstract class L2Character extends L2Object
 					L2Character targetsCastTarget = target.getAI().getCastTarget();
 					
 					// Check Raid boss attack
-					if ((target.isRaid() && (level > (target.getLevel() + RAID_LEVEL_MAX_DIFFERENCE))) || (!skill.isOffensive() && (targetsAttackTarget != null) && targetsAttackTarget.isRaid() && targetsAttackTarget.hasAttackerInAttackByList(target) // has attacked raid
-						&& (level > (targetsAttackTarget.getLevel() + RAID_LEVEL_MAX_DIFFERENCE))) || (!skill.isOffensive() && (targetsCastTarget != null) && targetsCastTarget.isRaid() && targetsCastTarget.hasAttackerInAttackByList(target) // has attacked raid
+					if ((target.isRaidCurseCaster() && (level > (target.getLevel() + RAID_LEVEL_MAX_DIFFERENCE))) || (!skill.isOffensive() && (targetsAttackTarget != null) && targetsAttackTarget.isRaidCurseCaster() && targetsAttackTarget.hasAttackerInAttackByList(target) // has attacked raid
+						&& (level > (targetsAttackTarget.getLevel() + RAID_LEVEL_MAX_DIFFERENCE))) || (!skill.isOffensive() && (targetsCastTarget != null) && targetsCastTarget.isRaidCurseCaster() && targetsCastTarget.hasAttackerInAttackByList(target) // has attacked raid
 							&& (level > (targetsCastTarget.getLevel() + RAID_LEVEL_MAX_DIFFERENCE))))
 					{
 						L2Skill tempSkill = SkillTable.getInstance().getInfo(4215, 1);
@@ -6170,7 +6180,7 @@ public abstract class L2Character extends L2Object
 								L2Object npcTarget = npcMob.getTarget();
 								for (L2Object target : targets)
 								{
-									if (npcMob.isRaid())
+									if (npcMob.isRaidCurseCaster())
 									{
 										int level = 0;
 										if (this instanceof L2PcInstance)
