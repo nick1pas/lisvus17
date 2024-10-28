@@ -222,6 +222,7 @@ public class L2Attackable extends L2NpcInstance
 	
 	private boolean _isChampion = false;
 	private boolean _isRaid = false;
+	private boolean _isRaidCurseCaster = false;
 	private boolean _isReturningToSpawnPoint = false;
 	
 	/**
@@ -1999,9 +2000,9 @@ public class L2Attackable extends L2NpcInstance
 		return _seeded;
 	}
 	
-	public void setChampion(boolean champ)
+	public void setChampion(boolean isChampion)
 	{
-		_isChampion = champ;
+		_isChampion = isChampion;
 	}
 	
 	@Override
@@ -2021,11 +2022,23 @@ public class L2Attackable extends L2NpcInstance
 	 * Set this Npc as a Raid instance.<BR>
 	 * <BR>
 	 * @param isRaid
+	 * @param isRaidCurseCaster
 	 */
 	@Override
-	public void setIsRaid(boolean isRaid)
+	public void setIsRaid(boolean isRaid, boolean isRaidCurseCaster)
 	{
 		_isRaid = isRaid;
+		_isRaidCurseCaster = isRaidCurseCaster;
+	}
+
+	/**
+	 * Return True if the L2Character can cast raid curse.
+	 * @return
+	 */
+	@Override
+	public boolean isRaidCurseCaster()
+	{
+		return _isRaidCurseCaster;
 	}
 	
 	/**

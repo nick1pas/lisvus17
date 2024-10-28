@@ -37,6 +37,6 @@ public class L2GrandMinionInstance extends L2MonsterInstance
 	{
 		super(objectId, template);
 		// Set this spawn as Raid Boss
-		setIsRaid(true);
+		setIsRaid(true, false);
 	}
 }
